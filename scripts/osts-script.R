@@ -12,7 +12,7 @@ osts_municipalities <- osts_municipalities %>%
 osts_non_municipalities <- osts_non_municipalities %>%
   mutate(municipality = "no")
 
-osts <- left_join(osts_municipalities, osts_non_municipalities)
+osts <- full_join(osts_municipalities, osts_non_municipalities)
 
 saveRDS(osts, "data/cleaned-and-or-rds/osts.rds")
 
