@@ -1,9 +1,9 @@
 library(tidyverse)
 library(readxl)
-osts_municipalities <- read_excel("christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
+osts_municipalities <- read_excel("data/christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
                                   sheet = "Municipalities")
 
-osts_non_municipalities <- read_excel("christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
+osts_non_municipalities <- read_excel("data/christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
                                       sheet = "non municipalities")
 
 osts_municipalities <- osts_municipalities %>%
@@ -14,5 +14,5 @@ osts_non_municipalities <- osts_non_municipalities %>%
 
 osts <- left_join(osts_municipalities, osts_non_municipalities)
 
-saveRDS(osts, "osts.rds")
+saveRDS(osts, "data/cleaned-and-or-rds/osts.rds")
 
