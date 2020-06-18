@@ -44,7 +44,7 @@ ggplot() +
 #Also looks like there are plants that show up in one or the other but not both
 
 #Import plants shapefile as an sf object
-plants <- st_read("data/raw/Environmental_Protection_Agency__EPA__Facility_Registry_Service__FRS__Wastewater_Treatment_Plants.shp")
+plants <- st_read("data/raw/EPA-shapefile/Environmental_Protection_Agency__EPA__Facility_Registry_Service__FRS__Wastewater_Treatment_Plants.shp")
 
 #Download oregon sf object
 OR_sf <- us_boundaries(type = "state", states = "OR")
