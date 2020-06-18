@@ -1,6 +1,7 @@
 library(tidyverse)
 library(sf)
 library(USAboundaries)
+library(PNWColors)
 
 osts <- readRDS("data/cleaned-and-or-rds/osts.rds")
 
@@ -32,11 +33,15 @@ OR <- map_data("state", "OR")
 ggplot() +
   geom_polygon(data = OR, 
                aes(x = long, y = lat), 
-               fill = "light gray") +
+               fill = "#009474") +
   geom_point(data = plot_data, 
              aes(x = Longitude, y = Latitude,
-                 size = Flow, color = Lagoons)) +
-  coord_map()
+                 color = Flow, shape = Lagoons)) +
+  scale_color_manual(values = pnw_palette("Sunset")) +
+  coord_quickmap() +
+  theme_minimal() +
+  labs(title = "Wastewater Facilities in Oregon")
+  
 
 #-------------------------------MAP 2----------------------------------------
 #This map uses a separate shapefile from the EPA, so it does not have Flow
@@ -52,6 +57,8 @@ OR_sf <- us_boundaries(type = "state", states = "OR")
 #Plot treatment plants, no info about flow rate
 #Points are plotted correctly here
 ggplot() +
-  geom_sf(data = OR_sf, fill = "light gray") +
-  geom_sf(data = plants) +
-  coord_sf()
+  geom_sf(data = OR_sf, fill = "#009474") +
+  geom_sf(data = plants, color = "#41476b") +
+  coord_sf() +
+  theme_minimal() +
+  labs(title = "Wastewater Facilities in Oregon")
