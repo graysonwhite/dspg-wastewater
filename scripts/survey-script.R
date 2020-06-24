@@ -6,8 +6,23 @@ survey_2017 <- read_excel("data/raw/Water_Rates_Survey_2017.xlsx",
 colnames(survey_2017) <- survey_2017[1,]
 survey_2017 <- survey_2017[-1,]
 
-survey_2017_select <- survey_2017[, c(1, 36, 39, 42, 45, 48, 84:97, 156:199)]
+survey_2017_select <- survey_2017[, c(1, 36, 39, 42, 45, 48, 84,97, 157:199)]
 
+colnames(survey_2017_select) <- c("City", "percent_rate_rev_to_debt", "percent_rate_rev_to_debt_NA", "assit_management_sys",
+                                  "last_year_rate_study", "last_year_methodolgy_updates", "charge_for_ww_services",
+                                  "5000_gal_bill", "provide_ww_service", "service_pop_residents_inside",
+                                  "service_pop_residents_outside", "service_pop_peakseason_inside", "service_pop_peakseason_inside",
+                                  "num_connections_res_inside", "num_connections_res_outside", "num_connections_comm_inside",
+                                  "num_connections_comm_outside", "num_connections_other_inside", "num_connections_other_outside",
+                                  "annual_vol_res_customer", "total_sewer_line_mi", "total_pumps_liftstations", "total_treatment_plants",
+                                  "percent_combined_sewer", "treatment_level_primary", "treatment_level_secondary", "treatment_level_tertiary",
+                                  "treatment_level_nitrogen_removal", "treatment_level_phosphorous_removal", "treatment_level_other",
+                                  "treatment_level_other_text", "stream_water_TMDL", "explain_TMDL", "year_of_construction", "last_major_renovation",
+                                  "capacity_dry_weather", "capacity_peak_wet_weather", "total_ww_treated_2016", "peak_wet_weather_flow_2016",
+                                  "peak_dry_weather_flow_2016", "perc_capacity_operating_at", "year_at_max_capacity", "year_exceed_design_capacity",
+                                  "indust_pretreatment", "reclaimed_water_public_private", "perc_reclaimed_is_reused_applied",
+                                  "where_reuse", "biosolids_to_public_private", "perc_biosolids_applied", "where_biosolids",
+                                  "additional_comments")
 
 # overwrites data file with file called `survey_2017` in your global environment
 # saveRDS(survey_2017, "data/cleaned-and-or-rds/survey_2017.rds")
