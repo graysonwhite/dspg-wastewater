@@ -1,3 +1,5 @@
+# Run this script to read the OSTS/DEQ dataset into your global environment
+
 library(tidyverse)
 library(readxl)
 osts_municipalities <- read_excel("data/christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
@@ -14,5 +16,11 @@ osts_non_municipalities <- osts_non_municipalities %>%
 
 osts <- full_join(osts_municipalities, osts_non_municipalities)
 
-saveRDS(osts, "data/cleaned-and-or-rds/osts.rds")
+osts <- osts %>%
+  filter(Flow %in% c("<1 MGD with lagoons", "< 1MGD"))
+
+
+
+# saves dataset over old one. Run once if script changes to incorporate changes to the file on the repository
+# saveRDS(osts, "data/cleaned-and-or-rds/osts.rds")
 
