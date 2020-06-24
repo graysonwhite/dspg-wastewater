@@ -6,7 +6,11 @@ survey_2017 <- read_excel("data/raw/Water_Rates_Survey_2017.xlsx",
 colnames(survey_2017) <- survey_2017[1,]
 survey_2017 <- survey_2017[-1,]
 
-saveRDS(survey_2017, "data/cleaned-and-or-rds/survey_2017.rds")
+survey_2017_select <- survey_2017[, c(1, 36, 39, 42, 45, 48, 84:97, 156:199)]
+
+
+# overwrites data file with file called `survey_2017` in your global environment
+# saveRDS(survey_2017, "data/cleaned-and-or-rds/survey_2017.rds")
 
 
 survey_2019 <- read_excel("data/raw/Water Rates Survey 2019_November 19, 2019_08.19.xlsx", 
