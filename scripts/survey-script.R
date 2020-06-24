@@ -24,6 +24,11 @@ colnames(survey_2017_select) <- c("City", "percent_rate_rev_to_debt", "percent_r
                                   "where_reuse", "biosolids_to_public_private", "perc_biosolids_applied", "where_biosolids",
                                   "additional_comments")
 
+survey_2017_select$`5000_gal_bill` <- parse_number(survey_2017_select$`5000_gal_bill`)
+survey_2017_select$total_sewer_line_mi <- parse_number(survey_2017_select$total_sewer_line_mi)
+survey_2017_select$year_of_construction <- parse_number(survey_2017_select$year_of_construction)
+survey_2017_select$last_major_renovation <- parse_number(survey_2017_select$last_major_renovation)
+
 # overwrites data file with file called `survey_2017` in your global environment
 # saveRDS(survey_2017, "data/cleaned-and-or-rds/survey_2017.rds")
 
@@ -65,6 +70,7 @@ survey_2019_select$`5000_gal_bill` <- parse_number(survey_2019_select$`5000_gal_
 survey_2019_select$total_sewer_lines_mi <- parse_number(survey_2019_select$total_sewer_lines_mi)
 survey_2019_select$year_of_contruction <- parse_number(survey_2019_select$year_of_contruction)
 survey_2019_select$year_of_renovation <- parse_number(survey_2019_select$year_of_renovation)
+
 
 # overwrites data file with file called `survey_2019` in your global environment
 # saveRDS(survey_2019, "data/cleaned-and-or-rds/survey_2019.rds")
