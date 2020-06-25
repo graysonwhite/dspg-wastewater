@@ -71,6 +71,59 @@ survey_2019_select$total_sewer_lines_mi <- parse_number(survey_2019_select$total
 survey_2019_select$year_of_contruction <- parse_number(survey_2019_select$year_of_contruction)
 survey_2019_select$year_of_renovation <- parse_number(survey_2019_select$year_of_renovation)
 
-
 # overwrites data file with file called `survey_2019` in your global environment
 # saveRDS(survey_2019, "data/cleaned-and-or-rds/survey_2019.rds")
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Heavily reducing number of columns to key vars, merging 2017 and 2019, -----------------------------------------------
+# merging those the the `osts` dataset ---------------------------------------------------------------------------------
+
+survey_2019_key_vars <- survey_2019_select %>%
+  select(City, Population, QCODE, Region, `5000_gal_bill`, total_sewer_lines_mi,
+         year_of_contruction, year_of_renovation, total_ww_treated) %>%
+  rename(`5000_gal_bill_2019` = `5000_gal_bill`,
+         total_sewer_lines_mi_2019 = total_sewer_lines_mi,
+         year_of_construction_2019 = year_of_contruction,
+         year_of_renovation_2019 = year_of_renovation,
+         total_ww_treated_2019 = total_ww_treated)
+
+survey_2017_key_vars <- survey_2017_select %>%
+  select(City, `5000_gal_bill`, total_sewer_line_mi, year_of_construction, last_major_renovation,
+         total_ww_treated_2016) %>%
+  rename(`5000_gal_bill_2017` = `5000_gal_bill`,
+         total_sewer_lines_mi_2017 = total_sewer_line_mi,
+         year_of_construction_2017 = year_of_construction,
+         year_of_renovation_2017 = last_major_renovation,
+         total_ww_treated_2017 = total_ww_treated_2016)
+
+key_survey_vars <- full_join(survey_2017_key_vars, survey_2019_key_vars,
+                             by = c("City" = "City"))
+  # load in osts dataset -----------------------------------------------
+osts_municipalities <- read_excel("data/christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
+                                  sheet = "Municipalities")
+
+osts_non_municipalities <- read_excel("data/christine-google-drive-data/Oregon Sewage Treatment Systems.xlsx", 
+                                      sheet = "non municipalities")
+
+osts_municipalities <- osts_municipalities %>%
+  mutate(municipality = "yes")
+
+osts_non_municipalities <- osts_non_municipalities %>%
+  mutate(municipality = "no")
+
+osts <- full_join(osts_municipalities, osts_non_municipalities)
+
+osts <- osts %>%
+  filter(Flow %in% c("<1 MGD with lagoons", "< 1MGD"))
+
+  # complete join -------------------------------------------------------
+attempt <- left_join(osts, key_survey_vars,
+                     by = c("City" = "City"))
+
+# more to do here, going to try to reduce each pair of "the same" col from
+# 2017 and 2019 into one column.
+
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
