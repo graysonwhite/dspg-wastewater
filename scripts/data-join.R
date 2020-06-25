@@ -1,6 +1,12 @@
+# This script loads, cleans, and tidies the survey data and the osts/deq data. It then joins these two dataframes into
+# a single dataframe called `working_df`. This dataframe includes variables from the survey data that I 
+# considered to be key variables, but there are many more that could be included quite easily. 
+
+# load necessary packages  --------------------------------------------------------------------------------------------
 library(tidyverse)
 library(readxl)
 
+# loading in and cleaning the survey dataframes -----------------------------------------------------------------------
 survey_2017 <- read_excel("data/raw/Water_Rates_Survey_2017.xlsx", 
                           sheet = "CLEANED")
 colnames(survey_2017) <- survey_2017[1,]
@@ -74,6 +80,8 @@ survey_2019_select$year_of_renovation <- parse_number(survey_2019_select$year_of
 # overwrites data file with file called `survey_2019` in your global environment
 # saveRDS(survey_2019, "data/cleaned-and-or-rds/survey_2019.rds")
 
+# end of loading and tidying survey data -------------------------------------------------------------------------------
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
@@ -119,11 +127,16 @@ osts <- osts %>%
   filter(Flow %in% c("<1 MGD with lagoons", "< 1MGD"))
 
   # complete join -------------------------------------------------------
-attempt <- left_join(osts, key_survey_vars,
-                     by = c("City" = "City"))
+working_df <- left_join(osts, key_survey_vars,
+                     by = c("City" = "City")) %>%
+  unite(`5000_gal_bill`, c(`5000_gal_bill_2017`, `5000_gal_bill_2019`), remove = TRUE, na.rm = TRUE) %>%
+  unite(total_sewer_lines_mi, c(total_sewer_lines_mi_2017, total_sewer_lines_mi_2019), remove = TRUE, na.rm = TRUE) %>%
+  unite(year_of_construction, c(year_of_construction_2017, year_of_construction_2019), remove = TRUE, na.rm = TRUE) %>%
+  unite(year_of_renovation, c(year_of_renovation_2017, year_of_renovation_2019), remove = TRUE, na.rm = TRUE) %>%
+  unite(total_ww_treated, c(total_ww_treated_2017, total_ww_treated_2019), remove = TRUE, na.rm = TRUE) 
 
-# more to do here, going to try to reduce each pair of "the same" col from
-# 2017 and 2019 into one column.
+    # writes over working_df file with `working_df` from global environment
+    # write.csv(working_df, file = "working_df.csv")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
