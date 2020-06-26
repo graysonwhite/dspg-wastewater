@@ -148,5 +148,13 @@ rownames(pop) <- NULL
 working_df <- working_df %>%
   left_join(pop, by = c("City" = "City"))
 
+  # add acreage
+acres <- read.csv("data/raw/city_limits.csv") %>%
+  select(CITY_NAME, acres) %>%
+  rename(City = CITY_NAME)
+
+working_df <- working_df %>%
+  left_join(acres, by = c("City" = "City"))
+
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
