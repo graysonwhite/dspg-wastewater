@@ -138,5 +138,15 @@ working_df <- left_join(osts, key_survey_vars,
     # writes over working_df file with `working_df` from global environment
     # write.csv(working_df, file = "working_df.csv")
 
+  # add population data --------------------------------------------------
+pop <- read.csv("data/raw/or_pop_by_decade.csv")
+pop <- pop[-(1:3),]
+colnames(pop) <- c("City", "pop_2018", "pop_2010", "pop_2000", "pop_1990", "pop_1980")
+rownames(pop) <- NULL
+
+
+working_df <- working_df %>%
+  left_join(pop, by = c("City" = "City"))
+
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
