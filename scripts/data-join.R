@@ -17,7 +17,7 @@ survey_2017_select <- survey_2017[, c(1, 36, 39, 42, 45, 48, 84,97, 157:199)]
 colnames(survey_2017_select) <- c("City", "percent_rate_rev_to_debt", "percent_rate_rev_to_debt_NA", "assit_management_sys",
                                   "last_year_rate_study", "last_year_methodolgy_updates", "charge_for_ww_services",
                                   "5000_gal_bill", "provide_ww_service", "service_pop_residents_inside",
-                                  "service_pop_residents_outside", "service_pop_peakseason_inside", "service_pop_peakseason_inside",
+                                  "service_pop_residents_outside", "service_pop_peakseason_inside", "service_pop_peakseason_outside",
                                   "num_connections_res_inside", "num_connections_res_outside", "num_connections_comm_inside",
                                   "num_connections_comm_outside", "num_connections_other_inside", "num_connections_other_outside",
                                   "annual_vol_res_customer", "total_sewer_line_mi", "total_pumps_liftstations", "total_treatment_plants",
@@ -29,6 +29,23 @@ colnames(survey_2017_select) <- c("City", "percent_rate_rev_to_debt", "percent_r
                                   "indust_pretreatment", "reclaimed_water_public_private", "perc_reclaimed_is_reused_applied",
                                   "where_reuse", "biosolids_to_public_private", "perc_biosolids_applied", "where_biosolids",
                                   "additional_comments")
+treatment_df <- survey_2017_select %>%
+  select(treatment_level_primary, treatment_level_secondary, treatment_level_tertiary,
+         treatment_level_nitrogen_removal, treatment_level_phosphorous_removal, treatment_level_other_text, City) 
+
+treatment_df$treatment_level_primary <- str_replace_all(treatment_df$treatment_level_primary, "1", "Primary")
+treatment_df$treatment_level_secondary <- str_replace_all(treatment_df$treatment_level_secondary, "1", "Secondary")
+treatment_df$treatment_level_tertiary <- str_replace_all(treatment_df$treatment_level_tertiary, "1", "Tertiary")
+treatment_df$treatment_level_nitrogen_removal <- str_replace_all(treatment_df$treatment_level_nitrogen_removal, "1", "Nitrogen Removal")
+treatment_df$treatment_level_phosphorous_removal <- str_replace_all(treatment_df$treatment_level_phosphorous_removal, "1", "Phosphorous Removal")
+
+treatment_df <- treatment_df %>%
+  unite(level_of_treatment, treatment_level_primary, treatment_level_secondary, treatment_level_tertiary,
+        treatment_level_nitrogen_removal, treatment_level_phosphorous_removal, treatment_level_other_text,
+        sep = ", ", na.rm = TRUE)
+
+survey_2017_select <- left_join(survey_2017_select, treatment_df)
+
 
 survey_2017_select$`5000_gal_bill` <- parse_number(survey_2017_select$`5000_gal_bill`)
 survey_2017_select$total_sewer_line_mi <- parse_number(survey_2017_select$total_sewer_line_mi)
@@ -90,21 +107,24 @@ survey_2019_select$year_of_renovation <- parse_number(survey_2019_select$year_of
 
 survey_2019_key_vars <- survey_2019_select %>%
   select(City, Population, QCODE, Region, `5000_gal_bill`, total_sewer_lines_mi,
-         year_of_contruction, year_of_renovation, total_ww_treated) %>%
+         year_of_contruction, year_of_renovation, total_ww_treated, level_of_treatment,
+         level_of_treatment_other) %>%
   rename(`5000_gal_bill_2019` = `5000_gal_bill`,
          total_sewer_lines_mi_2019 = total_sewer_lines_mi,
          year_of_construction_2019 = year_of_contruction,
          year_of_renovation_2019 = year_of_renovation,
-         total_ww_treated_2019 = total_ww_treated)
+         total_ww_treated_2019 = total_ww_treated,
+         level_of_treatment_2019 = level_of_treatment)
 
 survey_2017_key_vars <- survey_2017_select %>%
   select(City, `5000_gal_bill`, total_sewer_line_mi, year_of_construction, last_major_renovation,
-         total_ww_treated_2016) %>%
+         total_ww_treated_2016, level_of_treatment) %>%
   rename(`5000_gal_bill_2017` = `5000_gal_bill`,
          total_sewer_lines_mi_2017 = total_sewer_line_mi,
          year_of_construction_2017 = year_of_construction,
          year_of_renovation_2017 = last_major_renovation,
-         total_ww_treated_2017 = total_ww_treated_2016)
+         total_ww_treated_2017 = total_ww_treated_2016,
+         level_of_treatment_2017 = level_of_treatment)
 
 key_survey_vars <- full_join(survey_2017_key_vars, survey_2019_key_vars,
                              by = c("City" = "City"))
@@ -133,7 +153,8 @@ working_df <- left_join(osts, key_survey_vars,
   unite(total_sewer_lines_mi, c(total_sewer_lines_mi_2017, total_sewer_lines_mi_2019), remove = TRUE, na.rm = TRUE) %>%
   unite(year_of_construction, c(year_of_construction_2017, year_of_construction_2019), remove = TRUE, na.rm = TRUE) %>%
   unite(year_of_renovation, c(year_of_renovation_2017, year_of_renovation_2019), remove = TRUE, na.rm = TRUE) %>%
-  unite(total_ww_treated, c(total_ww_treated_2017, total_ww_treated_2019), remove = TRUE, na.rm = TRUE) 
+  unite(total_ww_treated, c(total_ww_treated_2017, total_ww_treated_2019), remove = TRUE, na.rm = TRUE) %>%
+  unite(level_of_treatment, c(level_of_treatment_2017, level_of_treatment_2019), sep = "_____", remove = TRUE, na.rm = TRUE)
 
     # writes over working_df file with `working_df` from global environment
     # write.csv(working_df, file = "working_df.csv")
