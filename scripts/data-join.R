@@ -156,8 +156,6 @@ working_df <- left_join(osts, key_survey_vars,
   unite(total_ww_treated, c(total_ww_treated_2017, total_ww_treated_2019), remove = TRUE, na.rm = TRUE) %>%
   unite(level_of_treatment, c(level_of_treatment_2017, level_of_treatment_2019), sep = "_____", remove = TRUE, na.rm = TRUE)
 
-    # writes over working_df file with `working_df` from global environment
-    # write.csv(working_df, file = "working_df.csv")
 
   # add population data --------------------------------------------------
 pop <- read.csv("data/raw/or_pop_by_decade.csv")
@@ -176,6 +174,9 @@ acres <- read.csv("data/raw/city_limits.csv") %>%
 
 working_df <- working_df %>%
   left_join(acres, by = c("City" = "City"))
+
+# writes over working_df file with `working_df` from global environment
+# write.csv(working_df, file = "working_df.csv")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
