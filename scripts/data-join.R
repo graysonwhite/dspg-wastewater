@@ -175,6 +175,16 @@ acres <- read.csv("data/raw/city_limits.csv") %>%
 working_df <- working_df %>%
   left_join(acres, by = c("City" = "City"))
 
+
+# Merge data with Amanda's permit data ----------------------------------------------------------------------------------
+Permits <- read_csv("data/raw/Permits.csv")
+
+Permits <- Permits %>%
+  select(-`phone#`, -firstname, -lastname, -constructionYear)
+
+working_df <- working_df %>%
+  left_join(Permits)
+
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
 
