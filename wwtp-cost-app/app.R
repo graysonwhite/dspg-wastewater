@@ -1,11 +1,15 @@
 # Load packages needed to run the application
 library(shiny)
 library(tidyverse)
+library(shinythemes)
 
 # UI
-ui <- fluidPage(
-    titlePanel("Old Faithful Geyser Data"),
-    sidebarLayout(
+
+ui <- navbarPage(
+    theme = shinytheme("flatly"),
+    title = "Visualizing Data of WWTPs in rural Oregon",
+    tabPanel(
+        "tab 1: basic example tab",
         sidebarPanel(
             sliderInput("bins",
                         "Number of bins:",
@@ -14,10 +18,20 @@ ui <- fluidPage(
                         value = 30)
         ),
         mainPanel(
-           plotOutput("distPlot")
+            plotOutput("distPlot")
+        )
+        ),
+    tabPanel(
+        "tab 2 (can have a different sidebar than tab 1 :-) )",
+        sidebarPanel()
+    ),
+    tabPanel(
+        "tab 3: contact info (doesn't have to have a sidebar)",
+        tags$p(
+            "our names and such"
         )
     )
-)
+    )
 
 # Server
 server <- function(input, output) {
