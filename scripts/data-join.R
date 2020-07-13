@@ -185,6 +185,14 @@ Permits <- Permits %>%
 working_df <- working_df %>%
   left_join(Permits)
 
+
+# Remove observations that Christine flagged ----------------------------------------------------------------------------
+remove <- read_csv("data/raw/remove.csv")
+working_df <- working_df %>%
+  anti_join(remove) %>%
+  filter(municipality == "yes")
+
+
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
 
