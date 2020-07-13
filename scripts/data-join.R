@@ -209,6 +209,13 @@ working_df <- working_df %>%
   add_column(cap_cost = NA) %>%
   add_column(om_cost = NA)
 
+# Misc Data cleaning ----------------------------------------------------------------------------------------------------
+working_df$pop_2018 <- parse_number(working_df$pop_2018) 
+working_df$pop_2010 <- parse_number(working_df$pop_2010)
+working_df$pop_2000 <- parse_number(working_df$pop_2000)
+working_df$pop_1990 <- parse_number(working_df$pop_1990) 
+working_df$pop_1980 <- parse_number(working_df$pop_1980)
+
 
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
