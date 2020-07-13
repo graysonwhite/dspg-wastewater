@@ -195,6 +195,20 @@ working_df <- working_df %>%
 # Remove duplicate observation ------------------------------------------------------------------------------------------
 working_df <- working_df[-104,]
 
+# Add relevant columns for cost data collection -------------------------------------------------------------------------
+working_df <- working_df %>%
+  add_column(upgrade1 = NA) %>%
+  add_column(upgrade1_cost = NA) %>%
+  add_column(upgrade1_year = NA) %>%
+  add_column(upgrade2 = NA) %>%
+  add_column(upgrade2_cost = NA) %>%
+  add_column(upgrade2_year = NA) %>%
+  add_column(upgrade3 = NA) %>%
+  add_column(upgrade3_cost = NA) %>%
+  add_column(upgrade3_year = NA) %>%
+  add_column(cap_cost = NA) %>%
+  add_column(om_cost = NA)
+
 
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
