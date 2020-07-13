@@ -192,6 +192,9 @@ working_df <- working_df %>%
   anti_join(remove) %>%
   filter(municipality == "yes")
 
+# Remove duplicate observation ------------------------------------------------------------------------------------------
+working_df <- working_df[-104,]
+
 
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
