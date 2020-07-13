@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # a single dataframe called `working_df`. This dataframe includes variables from the survey data that I 
 # considered to be key variables, but there are many more that could be included quite easily. 
 
+
+setwd("/Users/graysonwhite/Documents/GitHub/dspg-wastewater")
 # load necessary packages  --------------------------------------------------------------------------------------------
 library(tidyverse)
 library(readxl)
@@ -254,5 +256,35 @@ working_df %>%
   summarize(median = median(pop_2018, na.rm = TRUE))
 ```
 
+```{r}
+library(viridis)
+library(plotly)
+p <- working_df %>%
+  ggplot(aes(x = Region.x,
+             fill = type1)) +
+  geom_bar(position = "fill") +
+  scale_fill_viridis_d(option = "C", na.value = "grey50") +
+  scale_x_discrete(labels=c("Eastern", "Northwest", "West")) +
+  theme_bw() +
+  labs(x = "Region",
+       fill = "Main Type",
+       y = "Proportion",
+       title = "Rural WWTPs in Oregon by Type")
+p
+ggplotly(p, tooltip = c("type1", "count"))
+
+working_df %>%
+  filter(type2 != c("na", NA)) %>%
+  ggplot(aes(x = Region.x,
+             fill = type2)) +
+  geom_bar(position = "fill") +
+  scale_fill_viridis_d(option = "C", na.value = "grey50") +
+  scale_x_discrete(labels=c("Eastern", "Northwest", "West")) +
+  theme_bw() +
+  labs(x = "Region",
+       fill = "Secondary Type",
+       y = "Proportion",
+       title = "Rural WWTPs in Oregon by Secondary Type")
+```
 
 
