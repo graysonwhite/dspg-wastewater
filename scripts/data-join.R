@@ -216,6 +216,12 @@ working_df$pop_2000 <- parse_number(working_df$pop_2000)
 working_df$pop_1990 <- parse_number(working_df$pop_1990) 
 working_df$pop_1980 <- parse_number(working_df$pop_1980)
 
+working_df <- working_df %>%
+  mutate(
+    sq_mi = acres / 640,
+    pop_density_2018 = pop_2018 / sq_mi
+  )
+
 
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")

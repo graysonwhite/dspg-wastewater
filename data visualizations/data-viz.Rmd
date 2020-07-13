@@ -3,8 +3,8 @@ title: "Data Visualizations and Analysis"
 author: "Grayson White"
 date: "7/13/2020"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -231,6 +231,12 @@ working_df$pop_2010 <- parse_number(working_df$pop_2010)
 working_df$pop_2000 <- parse_number(working_df$pop_2000)
 working_df$pop_1990 <- parse_number(working_df$pop_1990) 
 working_df$pop_1980 <- parse_number(working_df$pop_1980)
+
+working_df <- working_df %>%
+  mutate(
+    sq_mi = acres / 640,
+    pop_density_2018 = pop_2018 / sq_mi
+  )
 ```
 
 
@@ -286,5 +292,41 @@ working_df %>%
        y = "Proportion",
        title = "Rural WWTPs in Oregon by Secondary Type")
 ```
+
+```{r}
+library(gtools)
+working_df$quantile_density <- quantcut(working_df$pop_density_2018, q = 4)
+ggplot(working_df[!is.na(working_df$quantile_density), ], aes(x = quantile_density,
+                       fill = type1)) +
+  geom_bar(position = "fill") +
+  scale_x_discrete(labels=c("Up to 1050", "1050 to 1660", "1660 to 2350", "2350 and more")) +
+  scale_fill_viridis_d(option = "B", na.value = "grey50") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  labs(x = "Population Density (People / Square Mile)",
+       y = "Proportion",
+       fill = "Type",
+       title = "Types of WWTPs Grouped By Population Density")
+
+
+working_df$quantile_pop_2018 <- quantcut(working_df$pop_2018, q = 4)
+working_df$cut_pop_2018 <- cut(working_df$pop_2018, breaks = c(0, 2500, 5000, 10000, 1e7))
+p1 <- ggplot(working_df[!is.na(working_df$cut_pop_2018), ], aes(x = cut_pop_2018,
+                       fill = type1)) +
+  geom_bar(position = "fill") +
+  scale_x_discrete(labels=c("Up to 2500", "2500 to 5000", "5000 to 10000", "10000 and more")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  labs(x = "Population (2018)",
+       y = "Proportion",
+       title = "Type of WWTP Grouped by Population",
+       fill = "Type")
+
+p1
+
+ggplotly(p1)
+
+```
+
 
 
