@@ -3,8 +3,8 @@ title: "Data Visualizations and Analysis"
 author: "Grayson White"
 date: "7/13/2020"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -277,7 +277,7 @@ p <- working_df %>%
        y = "Proportion",
        title = "Rural WWTPs in Oregon by Type")
 p
-ggplotly(p, tooltip = c("type1", "count"))
+# ggplotly(p, tooltip = c("type1", "count"))
 
 working_df %>%
   filter(type2 != c("na", NA)) %>%
@@ -324,6 +324,6 @@ p1 <- ggplot(working_df[!is.na(working_df$cut_pop_2018), ], aes(x = cut_pop_2018
 
 p1
 
-ggplotly(p1)
+# ggplotly(p1)
 
 ```
