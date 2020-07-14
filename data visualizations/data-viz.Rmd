@@ -3,8 +3,8 @@ title: "Data Visualizations and Analysis"
 author: "Grayson White"
 date: "7/13/2020"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -334,18 +334,14 @@ Maps:
 library(sf)
 library(USAboundaries)
 library(PNWColors)
-OR <- map_data("state", "OR")
+df_sf <- st_as_sf(working_df, coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84")
+OR_sf <- us_boundaries(type = "state", states = "OR")
 
 ggplot() +
-  geom_polygon(data = OR, 
-               aes(x = long, y = lat), 
-               fill = "#009474") +
-  geom_point(data = working_df, 
-             aes(x = Longitude, y = Latitude)) +
-  scale_color_manual(values = pnw_palette("Sunset")) +
-  coord_quickmap() +
+  geom_sf(data = OR_sf, fill = "#009474") +
+  geom_sf(data = df_sf, color = "#41476b") +
+  coord_sf() +
   theme_minimal() +
   labs(title = "Wastewater Facilities in Oregon")
-
 ```
 

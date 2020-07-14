@@ -2,6 +2,13 @@
 library(shiny)
 library(tidyverse)
 library(shinythemes)
+library(sf)
+library(USAboundaries)
+library(PNWColors)
+library(plotly)
+
+# Load working data frame
+working_df <- read_csv("working_df.csv")
 
 # UI
 
@@ -10,19 +17,13 @@ ui <- navbarPage(
     title = "Visualizing Data of WWTPs in rural Oregon",
     tabPanel(
         "tab 1: basic example tab",
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("map"),
+            textOutput("wd")
         )
         ),
     tabPanel(
-        "tab 2 (can have a different sidebar than tab 1 :-) )",
+        "tab 2: blank tab",
         sidebarPanel()
     ),
     tabPanel(
@@ -35,11 +36,21 @@ ui <- navbarPage(
 
 # Server
 server <- function(input, output) {
+    df_sf <- st_as_sf(working_df, coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84")
+    OR_sf <- us_boundaries(type = "state", states = "OR")
+    p1 <- ggplot() +
+        geom_sf(data = OR_sf, fill = "#009474") +
+        geom_sf(data = df_sf, color = "#41476b") +
+        coord_sf() +
+        theme_minimal() +
+        labs(title = "Wastewater Facilities in Oregon")
 
-    output$distPlot <- renderPlot({
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    output$map <- renderPlot({
+        # ggplotly(p1, width = 575, height = 425)
+        p1
+    })
+    output$wd <- renderText({
+        getwd()
     })
 }
 
