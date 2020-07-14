@@ -241,7 +241,7 @@ working_df <- working_df %>%
 
 
 ```{r}
-ggplot(working_df, aes(x = log(pop_2018), y = massLoadFlowMGD)) +
+ggplot(working_df, aes(x = log(pop_2018), y = dryDesignFlowMGD)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   theme_bw() +
