@@ -337,11 +337,24 @@ library(PNWColors)
 df_sf <- st_as_sf(working_df, coords = c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84")
 OR_sf <- us_boundaries(type = "state", states = "OR")
 
-ggplot() +
+
+working_df_ <- working_df %>%
+  filter(dryDesignFlowMGD <= 1)
+p2 <- ggplot() +
   geom_sf(data = OR_sf, fill = "#009474") +
-  geom_sf(data = df_sf, color = "#41476b") +
+  geom_point(data = working_df_,
+             aes(
+                 x = Longitude,
+                 y = Latitude,
+                 size = dryDesignFlowMGD
+                 ),
+             alpha = 0.6,
+             color = "#15266B") +
   coord_sf() +
-  theme_minimal() +
-  labs(title = "Wastewater Facilities in Oregon")
+  theme_void() +
+  labs(title = "Small (>1 MGD) Wastewater Treatment Facilities in Oregon",
+       size = "Dry Design Flow (MGD)") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.title.position = "plot")
 ```
 
