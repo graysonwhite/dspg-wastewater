@@ -291,6 +291,32 @@ working_df %>%
        fill = "Secondary Type",
        y = "Proportion",
        title = "Rural WWTPs in Oregon by Secondary Type")
+
+library(LaCroixColoR)
+
+p4 <- working_df %>%
+  mutate(
+    type_plot = case_when(
+      type1 %in% c("lagoons", "pre-aerated lagoons") ~ "lagoons",
+      type1 %in% c("trickling filter", "trickling filter - high rate",
+                   "trickling filter - low rate") ~ "trickling filter",
+      type1 %in% c("activated sludge") ~ "activated sludge",
+      type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+                   "STEP system", "oxidation ditch", "biological contactors"
+    ) ~ "other"
+  )) %>%
+  ggplot(aes(x = Region.x,
+             fill = factor(type_plot, levels = c("activated sludge", "lagoons", "trickling filter", "other")))) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = lacroix_palette("Pamplemousse", type = "discrete")) +
+  scale_x_discrete(labels=c("Eastern", "Northwest", "West")) +
+  theme_bw() +
+  labs(x = "Region",
+       fill = "Type",
+       y = "Proportion",
+       title = "Rural WWTPs in Oregon by Type and DEQ Region") +
+  theme(legend.position = "bottom")
+p4
 ```
 
 ```{r}
@@ -357,4 +383,34 @@ p2 <- ggplot() +
   theme(plot.title = element_text(hjust = 0.5),
         plot.title.position = "plot")
 ```
+
+
+
+```{r}
+# pop la croix
+working_df <- working_df %>%
+  mutate(
+    type_plot = case_when(
+      type1 %in% c("lagoons", "pre-aerated lagoons") ~ "lagoons",
+      type1 %in% c("trickling filter", "trickling filter - high rate",
+                   "trickling filter - low rate") ~ "trickling filter",
+      type1 %in% c("activated sludge") ~ "activated sludge",
+      type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+                   "STEP system", "oxidation ditch", "biological contactors"
+    ) ~ "other/NA"
+  ))
+ggplot(working_df[!is.na(working_df$cut_pop_2018), ], aes(x = cut_pop_2018,
+                       fill = factor(type_plot, levels = c("activated sludge", "lagoons", "trickling filter", "other/NA")))) +
+  geom_bar(position = "fill") +
+  scale_x_discrete(labels=c("Up to 2500", "2500 to 5000", "5000 to 10000", "10000 and more")) +
+  scale_fill_viridis_d(option = "E") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
+        legend.position = "bottom") +
+  labs(x = "Population (2018)",
+       y = "Proportion",
+       title = "Type of WWTP Grouped by Population",
+       fill = "Type") 
+```
+
 
