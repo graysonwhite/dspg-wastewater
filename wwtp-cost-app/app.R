@@ -12,30 +12,33 @@ working_df <- read_csv("working_df.csv")
 
 # UI
 ui <- navbarPage(
-    theme = shinytheme("flatly"),
+    theme = shinytheme("united"),
     title = "Visualizing Data of WWTPs in rural Oregon",
     tabPanel(
         "Overview",
         sidebarPanel()
     ),
     tabPanel(
-        "WWTP Map",
-        mainPanel(
-            plotlyOutput("map")
+        "Maps",
+        tabsetPanel(
+            tabPanel("Wastewater Treatment Plants",
+                     sidebarPanel(
+                         sliderInput("capacityslider", label = "Max Design Capacity", min = 0, max = 1, value = 1)
+                     ),
+                     mainPanel(
+                         plotlyOutput("map")
+                     )
+                     ),
+            tabPanel("Septic")
         )
         ),
     tabPanel(
-        "Septic Map",
-        tags$p(
-            "text"
-        )),
-    tabPanel(
-        "Education: Treatment",
-        sidebarPanel()
-    ),
-    tabPanel(
-        "Education: Collection",
-        sidebarPanel()
+        "Education",
+        sidebarPanel(),
+        tabsetPanel(
+            tabPanel("Treatment"),
+            tabPanel("Collection")
+        )
     ),
     tabPanel(
         "Funding Resources",
@@ -51,7 +54,7 @@ server <- function(input, output) {
         geom_sf(data = OR_sf, fill = "#009474") +
         geom_point(data = working_df, aes(label = Common_Name, x = Longitude, y = Latitude)) +
         coord_sf() +
-        theme_minimal() +
+        theme_void() +
         labs(title = "Wastewater Facilities in Oregon")
 
     output$map <- renderPlotly({
