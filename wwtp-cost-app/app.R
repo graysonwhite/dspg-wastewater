@@ -15,20 +15,31 @@ ui <- navbarPage(
     theme = shinytheme("flatly"),
     title = "Visualizing Data of WWTPs in rural Oregon",
     tabPanel(
-        "tab 1: basic example tab",
+        "Overview",
+        sidebarPanel()
+    ),
+    tabPanel(
+        "WWTP Map",
         mainPanel(
             plotlyOutput("map")
         )
         ),
     tabPanel(
-        "tab 2: blank tab",
+        "Septic Map",
+        tags$p(
+            "text"
+        )),
+    tabPanel(
+        "Education: Treatment",
         sidebarPanel()
     ),
     tabPanel(
-        "tab 3: contact info (doesn't have to have a sidebar)",
-        tags$p(
-            "our names and such"
-        )
+        "Education: Collection",
+        sidebarPanel()
+    ),
+    tabPanel(
+        "Funding Resources",
+        sidebarPanel()
     )
     )
 
