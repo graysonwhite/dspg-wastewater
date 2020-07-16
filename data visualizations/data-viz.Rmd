@@ -414,3 +414,40 @@ ggplot(working_df[!is.na(working_df$cut_pop_2018), ], aes(x = cut_pop_2018,
 ```
 
 
+```{r}
+# do not run, does not work, crashes R
+# try pop densities
+# library(tidycensus)
+# library(tigris)
+# 
+# pop_block <- get_acs(
+#   geography = "block group",
+#   variables = "B01003_001",
+#   state = "OR",
+#   geometry = TRUE,
+#   key = "abac0e1ca2aa3d3ebb31d6d2fcdbaf52d3e25f7d"
+# )
+# 
+# area_2017 <-
+#   block_groups(year = 2017,
+#                state = "OR",
+#                class = "sf")
+# 
+# area_2017 <- area_2017 %>%
+#   mutate(area = ALAND / 2589988) %>%
+#   select(area, geometry, GEOID)
+# 
+# pop_block <- pop_block %>%
+#   select(estimate, geometry, GEOID)
+# 
+# class(pop_block) <- "data.frame"
+# class(area_2017) <- "data.frame"
+#     
+# density <- left_join(pop_block, area_2017, by = c("GEOID" = "GEOID"))
+# 
+# density <- density %>%
+#   mutate(pop_density = estimate/area)
+# 
+# class(density) <- c("sf", "data.frame")
+```
+
