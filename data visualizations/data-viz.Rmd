@@ -314,8 +314,8 @@ p4 <- working_df %>%
   labs(x = "Region",
        fill = "Type",
        y = "Proportion",
-       title = "Rural WWTPs in Oregon by Type and DEQ Region") +
-  theme(legend.position = "bottom")
+       title = "Rural WWTPs in Oregon by Type and DEQ Region") 
+  #theme(legend.position = "bottom")
 p4
 ```
 
@@ -378,10 +378,13 @@ p2 <- ggplot() +
              color = "#15266B") +
   coord_sf() +
   theme_void() +
-  labs(title = "Small (>1 MGD) Wastewater Treatment Facilities in Oregon",
+  labs(title = "Small (<1 MGD) Wastewater Treatment Facilities in Oregon",
        size = "Dry Design Flow (MGD)") +
   theme(plot.title = element_text(hjust = 0.5),
-        plot.title.position = "plot")
+        plot.title.position = "plot",
+        legend.position = "bottom")
+
+p2
 ```
 
 
@@ -450,4 +453,25 @@ ggplot(working_df[!is.na(working_df$cut_pop_2018), ], aes(x = cut_pop_2018,
 # 
 # class(density) <- c("sf", "data.frame")
 ```
+
+
+```{r}
+working_df %>%
+  ggplot(aes(x = pop_density_2018)) +
+  geom_density(fill = "#EBBDCB",
+               alpha = 0.5) +
+  theme_bw() +
+  labs(x = "Population Density (2018)",
+       title = "Population Density of Towns/Cities in Our Sample")
+
+working_df %>%
+  ggplot(aes(x = pop_density_2018)) +
+  geom_histogram(bins = 11,
+                 fill = "#EBBDCB",
+                 color = "grey30") +
+  theme_bw() +
+  labs(x = "Population Density in 2018 (people/square mile)",
+       title = "Population Density of Towns/Cities in Our Sample")
+```
+
 
