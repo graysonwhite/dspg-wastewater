@@ -474,4 +474,25 @@ working_df %>%
        title = "Population Density of Towns/Cities in Our Sample")
 ```
 
+```{r}
+working_df %>%
+  filter(!is.na(basin)) %>%
+  group_by(basin) %>%
+  summarize(mgd = mean(dryDesignFlowMGD, na.rm = TRUE)) %>%
+  ggplot(
+    aes(x = reorder(basin, mgd), y = mgd)
+  ) +
+  geom_col(fill = "maroon") +
+  coord_flip() +
+  theme_bw() +
+  labs(
+    x = "Average Dry Design Flow (MGD)",
+    y = "Basin",
+    title = "Average Dry Design Flow, Grouped By Basin"
+  )
+
+
+
+
+```
 
