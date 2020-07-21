@@ -529,7 +529,20 @@ cost %>%
 m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + pop_2018 + pop_density_2018 + Region.x, data = cost)
 summary(m1)
 
+library(scales)
+point <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
+cost %>%
+  ggplot(aes(x = type1,
+             y = mean(`Total Cost`))) +
+  geom_col(fill = "forest green") +
+  labs(x = "Type of WWTP",
+       y = "Average Total Cost ($)") +
+  theme_bw() +
+  scale_y_continuous(labels = point)
 
+cost %>%
+  group_by(type1) %>%
+  summarize(n())
 
 ```
 
