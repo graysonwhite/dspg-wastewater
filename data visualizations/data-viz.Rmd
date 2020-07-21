@@ -3,7 +3,7 @@ title: "Data Visualizations and Analysis"
 author: "Grayson White"
 date: "7/13/2020"
 output:
-  pdf_document: default
+  #pdf_document: default
   html_document: default
 ---
 
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # considered to be key variables, but there are many more that could be included quite easily. 
 
 
-setwd("/Users/graysonwhite/Documents/GitHub/dspg-wastewater")
+setwd("~/dspg-wastewater")
 # load necessary packages  --------------------------------------------------------------------------------------------
 library(tidyverse)
 library(readxl)
@@ -546,4 +546,46 @@ cost %>%
 
 ```
 
+```{r}
+head(usda_cost)
+```
+
+```{r}
+
+usda_cost %>%
+  ggplot(aes(x = `Total Cost`)) +
+  geom_histogram(binwidth = 3000000) + 
+  theme_bw()
+
+usda_cost %>%
+  ggplot(aes(x = log(`Total Cost`))) +
+  geom_histogram(binwidth = 0.5) + 
+  theme_bw()
+
+usda_cost %>%
+  ggplot(aes(x = Population,
+             y = `Total Cost`)) +
+  geom_point() + 
+  theme_bw()
+
+usda_cost %>%
+  ggplot(aes(x = log(Population),
+             y = log(`Total Cost`))) +
+  geom_point() + 
+  theme_bw()
+
+usda_cost %>%
+  ggplot(aes(x = log(Population),
+             y = log(`Total Cost`))) +
+  stat_smooth(method = "lm") +
+  geom_point() + 
+  theme_bw()
+
+```
+
+```{r}
+mod <- lm(log(`Total Cost`) ~ log(Population), data = usda_cost)
+summary(mod)
+plot(mod)
+```
 
