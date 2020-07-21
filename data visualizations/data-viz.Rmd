@@ -237,6 +237,20 @@ working_df <- working_df %>%
     sq_mi = acres / 640,
     pop_density_2018 = pop_2018 / sq_mi
   )
+
+
+# Merge cost data from USDA ---------------------------------------------------------------------------------------------
+usda_cost <- read_excel("data/raw/wastewater-projects.xlsx")
+
+usda_cost$Entity <- sapply(usda_cost$Entity, toupper)
+usda_cost$Entity[15] <- "PACIFIC CITY JOINT WATER-SANITARY AUTHORITY"
+
+cost <- usda_cost %>%
+  left_join(working_df,
+             by = c("Entity" = "Legal_Name"))
+
+cost <- cost %>%
+  filter(!is.na(Flow))
 ```
 
 
@@ -490,9 +504,33 @@ working_df %>%
     y = "Basin",
     title = "Average Dry Design Flow, Grouped By Basin"
   )
+```
 
+```{r}
+# cost
+cost %>%
+  ggplot(aes(x = log(`Total Cost`),
+             y = pop_2018)) +
+  geom_point() +
+  theme_bw()
+
+cost %>%
+  ggplot(aes(x = log(`Total Cost`),
+             y = dryDesignFlowMGD)) +
+  geom_point() +
+  theme_bw()
+
+cost %>%
+  ggplot(aes(x = log(`Total Cost`),
+             y = pop_density_2018)) +
+  geom_point() +
+  theme_bw()
+
+m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + pop_2018 + pop_density_2018 + Region.x, data = cost)
+summary(m1)
 
 
 
 ```
+
 
