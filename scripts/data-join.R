@@ -223,6 +223,20 @@ working_df <- working_df %>%
   )
 
 
+# Merge cost data from USDA ---------------------------------------------------------------------------------------------
+usda_cost <- read_excel("data/raw/wastewater-projects.xlsx")
+
+usda_cost$Entity <- sapply(usda_cost$Entity, toupper)
+usda_cost$Entity[15] <- "PACIFIC CITY JOINT WATER-SANITARY AUTHORITY"
+
+cost <- usda_cost %>%
+  left_join(working_df,
+             by = c("Entity" = "Legal_Name"))
+
+cost <- cost %>%
+  filter(!is.na(Flow))
+
+
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")
 
