@@ -547,41 +547,108 @@ cost %>%
 ```
 
 ```{r}
-head(usda_cost)
+usda_cost
 ```
 
 ```{r}
+library(ggrepel)
+library(patchwork)
 
-usda_cost %>%
+# usda_cost %>%
+#   ggplot(aes(x = `Total Cost`)) +
+#   geom_histogram(binwidth = 3000000) + 
+#   theme_bw()
+
+(density <- usda_cost %>%
   ggplot(aes(x = `Total Cost`)) +
-  geom_histogram(binwidth = 3000000) + 
-  theme_bw()
+  geom_density(color = "grey10", 
+               fill = "grey70", 
+               alpha = 0.5) +
+  labs(title = "Cost Density Plot",
+       subtitle = "USDA funded plants constructed in Oregon since 2012",
+       caption = "($USD not adjusted for inflation)",
+       x = "Cost", y = NULL) +
+  theme_bw())
 
-usda_cost %>%
+# usda_cost %>%
+#   ggplot(aes(x = log(`Total Cost`))) +
+#   geom_histogram(binwidth = 0.5) + 
+#   theme_bw()
+
+(logdensity <- usda_cost %>%
   ggplot(aes(x = log(`Total Cost`))) +
-  geom_histogram(binwidth = 0.5) + 
-  theme_bw()
+  geom_density(color = "grey10", 
+               fill = "grey70", 
+               alpha = 0.5) +
+  labs(title = "Log Transformed Cost Density Plot",
+       subtitle = "USDA funded plants constructed in Oregon since 2012",
+       caption = "($USD not adjusted for inflation)", 
+       x = "ln(Cost)", y = NULL) +
+  theme_bw())
 
-usda_cost %>%
+cost_model <- function(x) {
+  124903.9*x^0.4915
+}
+
+(scatter1 <- usda_cost %>%
   ggplot(aes(x = Population,
              y = `Total Cost`)) +
-  geom_point() + 
-  theme_bw()
+  geom_point() +
+  # stat_function(fun = cost_model, 
+  #               color = "blue", lwd = 1) +
+  scale_y_continuous(labels = scales::dollar) + 
+  scale_x_continuous(labels = point) +
+  labs(title = "Cost of Wastewater Treatment Plant vs. Population",
+       y = "Total Cost") +
+  theme_bw())
 
-usda_cost %>%
+(scatter2 <- usda_cost %>%
   ggplot(aes(x = log(Population),
              y = log(`Total Cost`))) +
   geom_point() + 
-  theme_bw()
+  labs(title = "Log Transformed Cost of WWTPs vs. Log Transformed Population",
+       y = "Log of Total Cost", x = "Log of Population") +
+  theme_bw())
 
-usda_cost %>%
+(scatter3 <- usda_cost %>%
+  ggplot(aes(x = Population,
+             y = `Total Cost`)) +
+  geom_point() +
+  stat_function(fun = cost_model, 
+                color = "blue", lwd = 1) +
+  scale_y_continuous(labels = scales::dollar) + 
+  scale_x_continuous(labels = point) +
+  labs(title = "Cost of Wastewater Treatment Plant vs. Population",
+       y = "Total Cost") +
+  theme_bw())
+
+
+(scatter4 <- usda_cost %>%
   ggplot(aes(x = log(Population),
              y = log(`Total Cost`))) +
-  stat_smooth(method = "lm") +
+  stat_smooth(method = "lm",
+              color = "blue", lwd = 1, se = F) +
   geom_point() + 
-  theme_bw()
-
+  labs(title = "Log Transformed Cost of WWTPs vs. Log Transformed Population",
+       y = "Log of Total Cost", x = "Log of Population") +
+  theme_bw())
 ```
+
+```{r, include=F}
+plots <- (scatter1 + scatter2) /
+  (scatter3 + scatter4) +
+  plot_layout(widths = c(2,2), heights = c(1,1)) +
+  plot_annotation(caption = "USDA funded plants constructed in Oregon since 2012. $USD not adjusted for inflation.") +
+  theme(text = element_text(size = 12))
+
+ggsave("costvspop_models.pdf", plot = plots, width = 12.5, height = 8.5, units = "in")
+```
+
+```{r, include=F}
+density / 
+  logdensity
+```
+
 
 ```{r}
 mod <- lm(log(`Total Cost`) ~ log(Population), data = usda_cost)
