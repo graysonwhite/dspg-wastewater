@@ -247,7 +247,9 @@ cost <- cost %>%
 ```
 
 ```{r}
-usda_cost %>%
+library(LaCroixColoR)
+library(ggExtra)
+plot1 <- usda_cost %>%
   mutate(
     collection_2 = case_when(
       Collection %in% c("Conventional Gravity") ~ "Conventional Gravity",
@@ -267,6 +269,39 @@ usda_cost %>%
   labs(x = "Log of Population",
        y = "Log of Total Cost",
        color = "Collection Type",
-       title = "Population ~ Total Cost, Controlling for Collection Type")
+       title = "Population ~ Total Cost, Controlling for Collection Type") +
+  scale_color_manual(values = lacroix_palette("PeachPear", n = 3, type = "discrete"))
+plot1
 ```
+
+```{r}
+# check strength of correlation between construction and total cost
+# This might be helpful if we could only find construction cost for some plants
+usda_cost %>%
+  ggplot(aes(x = `Construction Cost`,
+             y = `Total Cost`)) +
+  geom_smooth(method = "lm", se = FALSE, color = "goldenrod") +
+  geom_point(color = "steelblue") +
+  annotate("text", x = 1e7, y = 1.5e7, label = "r^2 = 0.8554") +
+  theme_bw() 
+
+m1 <- lm(`Total Cost` ~ `Construction Cost`, usda_cost)
+summary(m1)
+
+# remove outlier
+usda_cost_no_outlier <- usda_cost[-2,]
+
+usda_cost_no_outlier %>%
+  ggplot(aes(x = `Construction Cost`,
+             y = `Total Cost`)) +
+  geom_smooth(method = "lm", se = FALSE, color = "goldenrod") +
+  geom_point(color = "steelblue") +
+  annotate("text", x = 1e7, y = 1.5e7, label = "r^2 = 0.9861") +
+  theme_bw() 
+
+m2 <- lm(`Total Cost` ~ `Construction Cost`, usda_cost_no_outlier)
+summary(m2)
+
+```
+
 
