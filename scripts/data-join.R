@@ -236,6 +236,9 @@ cost <- usda_cost %>%
 cost <- cost %>%
   filter(!is.na(Flow))
 
+# Import WPCF permits ---------------------------------------------------------------------------------------------------
+wpcf <- read_csv("data/raw/WPCFperms.csv")
+
 
 # writes over working_df file with `working_df` from global environment
 # write.csv(working_df, file = "working_df.csv")

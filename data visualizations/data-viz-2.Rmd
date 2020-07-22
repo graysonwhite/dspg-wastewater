@@ -301,7 +301,4 @@ usda_cost_no_outlier %>%
 
 m2 <- lm(`Total Cost` ~ `Construction Cost`, usda_cost_no_outlier)
 summary(m2)
-
 ```
-
-
