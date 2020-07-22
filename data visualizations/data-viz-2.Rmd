@@ -302,3 +302,61 @@ usda_cost_no_outlier %>%
 m2 <- lm(`Total Cost` ~ `Construction Cost`, usda_cost_no_outlier)
 summary(m2)
 ```
+
+```{r}
+usda_cost %>%
+  ggplot(aes(x = Population)) +
+  geom_density(fill = "steelblue", alpha = 0.5) +
+  theme_bw()
+
+usda_cost %>%
+  ggplot(aes(x = log(Population))) +
+  geom_density(fill = "steelblue", alpha = 0.5) +
+  theme_bw() +
+  geom_function(fun = dnorm,
+                args = list(mean = mean(log(usda_cost$Population)),
+                            sd = sd(log(usda_cost$Population))),
+                color = "goldenrod")
+
+working_df %>%
+  ggplot(aes(x = log(pop_2018))) +
+  geom_density(fill = "steelblue", alpha = 0.5) +
+  theme_bw() +
+  geom_function(fun = dnorm,
+                args = list(mean = mean(log(working_df$pop_2018), na.rm = TRUE),
+                            sd = sd(log(working_df$pop_2018), na.rm = TRUE)),
+                color = "goldenrod") +
+  xlim(2,14)
+```
+
+```{r}
+working_df %>%
+  mutate(
+    type_plot = case_when(
+      type1 %in% c("lagoons", "pre-aerated lagoons") ~ "lagoons",
+      type1 %in% c("trickling filter", "trickling filter - high rate",
+                   "trickling filter - low rate") ~ "trickling filter",
+      type1 %in% c("activated sludge") ~ "activated sludge",
+      type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+                   "STEP system", "oxidation ditch", "biological contactors") ~ "other/NA")) %>%
+  filter(type_plot %in% c("lagoons", "trickling filter", "activated sludge")) %>%
+  ggplot(aes(y = type_plot,
+             x = dryDesignFlowMGD,
+             color = type_plot,
+             fill = type_plot)) +
+  scale_color_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+  scale_fill_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+  geom_violin(
+              alpha = 0.4) +
+  geom_point() +
+  theme_bw() +
+  labs(
+    x = "Dry Design Flow (MGD)",
+    y = "Type"
+  ) +
+  theme(
+    legend.position = "none"
+  )
+```
+
+
