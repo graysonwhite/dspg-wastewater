@@ -14,6 +14,6 @@ We are also creating a `shiny` web application that can be found [here](https://
 We have began to characterize wastewater treatment plants in Oregon, and we have found some interesting results about their structure, location, and cost. 
 
 Below, we have a plot of 114 small (<1 MGD) wastewater treatment plants in Oregon:
-![]("https://github.com/graysonwhite/dspg-wastewater/blob/master/data%20visualizations/png-visualizations/geq.png")
+![](https://github.com/graysonwhite/dspg-wastewater/blob/master/data%20visualizations/png-visualizations/geq.png)
 
 
