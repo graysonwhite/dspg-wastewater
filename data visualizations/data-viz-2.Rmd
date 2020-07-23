@@ -356,7 +356,48 @@ working_df %>%
   ) +
   theme(
     legend.position = "none"
+  ) +
+  xlim(0,1)
+```
+
+```{r}
+# bar chart legend fix
+working_df %>%
+  filter(!is.na(basin)) %>%
+  group_by(basin) %>%
+  summarize(mgd = mean(dryDesignFlowMGD, na.rm = TRUE)) %>%
+  ggplot(
+    aes(x = reorder(basin, mgd), y = mgd)
+  ) +
+  geom_col(fill = "maroon") +
+  coord_flip() +
+  theme_bw() +
+  labs(
+    y = "Average Dry Design Flow (MGD)",
+    x = "Basin",
+    title = "Average Dry Design Flow, Grouped By Basin"
   )
 ```
+
+```{r}
+library(scales)
+point <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
+
+cost %>%
+  group_by(type1) %>%
+  summarize(mean = mean(`Total Cost` / Population.x)) %>%
+  ggplot(aes(x = reorder(type1, mean),
+             y = mean)) +
+  geom_col(fill = "forest green") +
+  annotate(geom = "text", x = 1, y = 2000, label = "n = 3") +
+  annotate(geom = "text", x = 2, y = 3000, label = "n = 1") +
+  annotate(geom = "text", x = 3, y = 4000, label = "n = 6") +
+  labs(x = "Type of WWTP",
+       y = "Average Cost / Population ($/person)") +
+  theme_bw() +
+  scale_y_continuous(labels = point)
+```
+
+
 
 
