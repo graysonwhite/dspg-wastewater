@@ -39,7 +39,7 @@ ui <- navbarPage(
         )
     ),
     tabPanel(
-        "Maps",
+        "Data Visualizations & Maps",
         tabsetPanel(
             tabPanel("Wastewater Treatment Plants",
                      sidebarPanel(
@@ -63,6 +63,10 @@ ui <- navbarPage(
     ),
     tabPanel(
         "Funding Resources",
+        sidebarPanel()
+    ),
+    tabPanel(
+        "Costs Estimator",
         sidebarPanel()
     )
     )
