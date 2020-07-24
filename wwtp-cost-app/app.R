@@ -53,7 +53,8 @@ ui <- navbarPage(
             tabPanel("Septic"),
             tabPanel("Misc. Data Visualizations",
                      mainPanel(
-                         plotOutput("plot1")
+                         width = 12,
+                         div(plotOutput("plot1", width = 600, height = 500), align = "center")
                      )
                      )
         )
