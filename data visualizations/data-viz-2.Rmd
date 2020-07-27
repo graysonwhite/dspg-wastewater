@@ -5,7 +5,7 @@ date: "7/22/2020"
 output: html_document
 ---
 
-```{r}
+```{r include = FALSE}
 # This script loads, cleans, and tidies the survey data and the osts/deq data. It then joins these two dataframes into
 # a single dataframe called `working_df`. This dataframe includes variables from the survey data that I 
 # considered to be key variables, but there are many more that could be included quite easily. 
