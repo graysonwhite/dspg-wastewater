@@ -6,10 +6,22 @@ library(sf)
 library(USAboundaries)
 library(PNWColors)
 library(plotly)
+library(DT)
+library(readxl)
 
 # Load working data frame
 working_df <- read_csv("working_df.csv")
+usda_cost <- read_excel("wastewater-projects.xlsx")
 
+usda_cost$Entity <- sapply(usda_cost$Entity, toupper)
+usda_cost$Entity[15] <- "PACIFIC CITY JOINT WATER-SANITARY AUTHORITY"
+
+cost <- usda_cost %>%
+    left_join(working_df,
+              by = c("Entity" = "Legal_Name"))
+
+cost <- cost %>%
+    filter(!is.na(Flow))
 
 # UI
 ui <- navbarPage(
@@ -56,6 +68,12 @@ ui <- navbarPage(
                          width = 12,
                          div(plotOutput("plot1", width = 600, height = 500), align = "center")
                      )
+                     ),
+            tabPanel("Data",
+                     mainPanel(
+                         width = 12,
+                         dataTableOutput("cost_data")
+                     )
                      )
         )
         ),
@@ -85,6 +103,10 @@ server <- function(input, output) {
     reactive_df <- reactive({
         working_df %>%
             filter(dryDesignFlowMGD <= input$capacityslider)
+    })
+    
+    cost_react <- reactive({
+        cost
     })
 
     
@@ -131,6 +153,12 @@ server <- function(input, output) {
             legend.position = "none"
         ) +
         xlim(0,1)
+    })
+    
+    output$cost_data <- renderDataTable({
+        datatable(
+            usda_cost
+        )
     })
 }
 
