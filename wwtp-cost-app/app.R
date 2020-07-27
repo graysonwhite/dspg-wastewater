@@ -1,4 +1,4 @@
-# Load packages needed to run the application
+# Load packages needed to run the application ---------------------------------------------------------------------------
 library(shiny)
 library(tidyverse)
 library(shinythemes)
@@ -8,8 +8,10 @@ library(PNWColors)
 library(plotly)
 library(DT)
 library(readxl)
+library(scales)
+library(markdown)
 
-# Load working data frame
+# Load data -------------------------------------------------------------------------------------------------------------
 working_df <- read_csv("working_df.csv")
 usda_cost <- read_excel("wastewater-projects.xlsx")
 
@@ -23,31 +25,16 @@ cost <- usda_cost %>%
 cost <- cost %>%
     filter(!is.na(Flow))
 
-# UI
+# UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
     theme = shinytheme("united"),
     title = "Visualizing Data of WWTPs in rural Oregon",
     tabPanel(
         "Overview",
         mainPanel(
-            width = 12,
-            h1("Rural Wastewater Facility Cost Modeling & Planning Tools"),
-            h2("Overview"),
-            p("This web-based application includes tools for cost modeling and planning your potential
-              wastewater treatment plant. It also includes educational resources for funding your wastewater treatment
-              plant and for learning about options in regards to a centralized wastewater treatment system.
-              It was created during summer 2020 for the Data Science for the
-              Public Good program at Oregon State University."),
-            h2("Panels"),
-            h3("Maps"),
-            p("text"),
-            h3("Education"),
-            p("text"),
-            h3("Funding Resources"),
-            p("text"),
-            h2("Creators"),
-            p("This application was created by Jakob Oetinger, Amanda Reding, and Grayson White, under the supervision
-              of Dr. Christine Kelly.")
+            fluidPage(
+                includeMarkdown('overview.Rmd')
+            )
         )
     ),
     tabPanel(
@@ -66,7 +53,9 @@ ui <- navbarPage(
             tabPanel("Misc. Data Visualizations",
                      mainPanel(
                          width = 12,
-                         div(plotOutput("plot1", width = 600, height = 500), align = "center")
+                         div(plotOutput("plot1", width = 600, height = 500), align = "center"),
+                         div(plotOutput("plot2", width = 600, height = 500), align = "center"),
+                         div(plotOutput("plot3", width = 600, height = 500), align = "center")
                      )
                      ),
             tabPanel("Data",
@@ -87,7 +76,11 @@ ui <- navbarPage(
     ),
     tabPanel(
         "Funding Resources",
-        sidebarPanel()
+        mainPanel(
+            fluidPage(
+                includeMarkdown('funding.Rmd')
+            )
+        )
     ),
     tabPanel(
         "Costs Estimator",
@@ -95,7 +88,7 @@ ui <- navbarPage(
     )
     )
 
-# Server
+# Server ----------------------------------------------------------------------------------------------------------------
 server <- function(input, output) {
     df_sf <- st_as_sf(working_df, coords = c("Longitude", "Latitude"), crs = 4326)
     OR_sf <- us_boundaries(type = "state", states = "OR")
@@ -105,11 +98,12 @@ server <- function(input, output) {
             filter(dryDesignFlowMGD <= input$capacityslider)
     })
     
-    cost_react <- reactive({
-        cost
+    cost_react <- reactive({ 
+        cost 
     })
-
     
+# Data Visualization & Maps ---------------------------------------------------------------------------------------------
+    # Wastewater Treatment Plants ---------------------------------------------------------------------------------------
     p1 <- reactive({
         ggplot() +
         geom_sf(data = OR_sf, fill = "#009474") +
@@ -123,7 +117,10 @@ server <- function(input, output) {
             ggplotly(p1())
     })
     
-    output$plot1 <- renderPlot({
+    # Septic-------------------------------------------------------------------------------------------------------------
+    
+    # Misc. Data Visualizations -----------------------------------------------------------------------------------------
+    output$plot1 <- renderPlot({ 
         working_df %>%
         mutate(
             type_plot = case_when(
@@ -155,12 +152,53 @@ server <- function(input, output) {
         xlim(0,1)
     })
     
+    
+    output$plot2 <- renderPlot({
+        working_df %>%
+            filter(!is.na(basin)) %>%
+            group_by(basin) %>%
+            summarize(mgd = mean(dryDesignFlowMGD, na.rm = TRUE)) %>%
+            ggplot(
+                aes(x = reorder(basin, mgd), y = mgd)
+            ) +
+            geom_col(fill = "maroon") +
+            coord_flip() +
+            theme_bw() +
+            labs(
+                y = "Average Dry Design Flow (MGD)",
+                x = "Basin",
+                title = "Average Dry Design Flow, Grouped By Basin"
+            )
+    })
+    
+    point <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
+    output$plot3 <- renderPlot({
+        cost %>%
+            group_by(type1) %>%
+            summarize(mean = mean(`Total Cost` / Population.x)) %>%
+            ggplot(aes(x = reorder(type1, mean),
+                       y = mean)) +
+            geom_col(fill = "forest green") +
+            annotate(geom = "text", x = 1, y = 2000, label = "n = 3") +
+            annotate(geom = "text", x = 2, y = 3000, label = "n = 1") +
+            annotate(geom = "text", x = 3, y = 4000, label = "n = 6") +
+            labs(x = "Type of WWTP",
+                 y = "Average Cost / Population ($/person)") +
+            theme_bw() +
+            scale_y_continuous(labels = point)
+    })
+    
+    # Data --------------------------------------------------------------------------------------------------------------
     output$cost_data <- renderDataTable({
         datatable(
             usda_cost
         )
     })
+    
+# Education
+# Funding Resources
+# Cost Estimator
 }
 
-# Run the application 
+# Runs the application --------------------------------------------------------------------------------------------------
 shinyApp(ui = ui, server = server)
