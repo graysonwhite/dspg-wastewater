@@ -28,6 +28,39 @@ cost <- usda_cost %>%
 cost <- cost %>%
     filter(!is.na(Flow))
 
+usda_cost <- usda_cost %>%
+    left_join(working_df,
+              by = c("Entity" = "Legal_Name")) %>%
+    select(1:9, Latitude, Longitude)
+
+    # These are lat/long of the *city* not the exact of the plant
+    usda_cost$Latitude[6] <- 45.4832
+    usda_cost$Longitude[6] <- -118.8300 
+
+    usda_cost$Latitude[7] <- 43.6704
+    usda_cost$Longitude[7] <- -121.5036
+
+    usda_cost$Latitude[8] <- 44.4632
+    usda_cost$Longitude[8] <- -118.7099
+
+    usda_cost$Latitude[9] <- 43.3401
+    usda_cost$Longitude[9] <- -124.3301
+
+    usda_cost$Latitude[11] <- 45.9932
+    usda_cost$Longitude[11] <- -123.9226
+
+    usda_cost$Latitude[14] <- 44.2998
+    usda_cost$Longitude[14] <- -120.8345
+
+    usda_cost$Latitude[16] <- 45.7068
+    usda_cost$Longitude[16] <- -121.5281
+
+    usda_cost$Latitude[17] <- 44.8193
+    usda_cost$Longitude[17] <- -119.4211
+
+    usda_cost$Latitude[19] <- 45.2965
+    usda_cost$Longitude[19] <- -117.8080
+
 # UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
     theme = shinytheme("united"),
@@ -65,6 +98,18 @@ ui <- navbarPage(
                      mainPanel(
                          width = 12,
                          dataTableOutput("cost_data")
+                     )
+                     ),
+            tabPanel("Cost Map",
+                     sidebarPanel(
+                         sliderInput("totalcost", label = "Total Cost",
+                                     min = 0,
+                                     max = 22000000,
+                                     value = 22000000),
+                         submitButton("Generate Plot")
+                     ),
+                     mainPanel(
+                         leafletOutput("costmap")
                      )
                      )
         )
@@ -199,6 +244,29 @@ server <- function(input, output) {
         datatable(
             usda_cost
         )
+    })
+    # Cost Map ----------------------------------------------------------------------------------------------------------
+    usda_react <- reactive({
+        usda_cost %>%
+            dplyr::filter(`Total Cost` <= input$totalcost)
+    })
+    
+    cost_popup <- paste0("<b>", toTitleCase(tolower(usda_cost$Entity)), "</b></br>",
+                         "Treatment: ", usda_cost$Treatment, "</br>",
+                         "Collection: ", usda_cost$Collection, "</br>",
+                         "Discharge: ", usda_cost$Discharge, "</br>",
+                         "Total Cost: ", dollar(usda_cost$`Total Cost`), "</br>",
+                         "Construction Cost: ", dollar(usda_cost$`Construction Cost`), "</br>")
+    
+    output$costmap <- renderLeaflet({
+        leaflet(usda_react(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
+            addTiles() %>%
+            addCircleMarkers(lng = ~Longitude,
+                             lat = ~Latitude, 
+                             color = "maroon",
+                             opacity = 0.5,
+                             popup = cost_popup,
+                             radius = 4) 
     })
     
 # Education
