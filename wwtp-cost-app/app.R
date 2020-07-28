@@ -109,8 +109,8 @@ ui <- navbarPage(
                          submitButton("Generate Plot")
                      ),
                      mainPanel(
-                         leafletOutput("costmap")
-                     )
+                         leafletOutput("costmap"),
+                         )
                      )
         )
         ),
@@ -251,13 +251,6 @@ server <- function(input, output) {
             dplyr::filter(`Total Cost` <= input$totalcost)
     })
     
-    cost_popup <- paste0("<b>", toTitleCase(tolower(usda_cost$Entity)), "</b></br>",
-                         "Treatment: ", usda_cost$Treatment, "</br>",
-                         "Collection: ", usda_cost$Collection, "</br>",
-                         "Discharge: ", usda_cost$Discharge, "</br>",
-                         "Total Cost: ", dollar(usda_cost$`Total Cost`), "</br>",
-                         "Construction Cost: ", dollar(usda_cost$`Construction Cost`), "</br>")
-    
     output$costmap <- renderLeaflet({
         leaflet(usda_react(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
             addTiles() %>%
@@ -265,7 +258,14 @@ server <- function(input, output) {
                              lat = ~Latitude, 
                              color = "maroon",
                              opacity = 0.5,
-                             popup = cost_popup,
+                             popup = paste0(
+                                 "<b>", toTitleCase(tolower(usda_react()$Entity)), "</b></br>",
+                                 "Treatment: ", usda_react()$Treatment, "</br>",
+                                 "Collection: ", usda_react()$Collection, "</br>",
+                                 "Discharge: ", usda_react()$Discharge, "</br>",
+                                 "Total Cost: ", dollar(usda_react()$`Total Cost`), "</br>",
+                                 "Construction Cost: ", dollar(usda_react()$`Construction Cost`), "</br>"
+                                 ),
                              radius = 4) 
     })
     
