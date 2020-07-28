@@ -10,6 +10,9 @@ library(DT)
 library(readxl)
 library(scales)
 library(markdown)
+library(leaflet)
+library(maps)
+library(tools)
 
 # Load data -------------------------------------------------------------------------------------------------------------
 working_df <- read_csv("working_df.csv")
@@ -46,7 +49,7 @@ ui <- navbarPage(
                          submitButton("Generate Plot")
                      ),
                      mainPanel(
-                         plotlyOutput("map")
+                         leafletOutput("map")
                      )
                      ),
             tabPanel("Septic"),
@@ -104,17 +107,20 @@ server <- function(input, output) {
     
 # Data Visualization & Maps ---------------------------------------------------------------------------------------------
     # Wastewater Treatment Plants ---------------------------------------------------------------------------------------
-    p1 <- reactive({
-        ggplot() +
-        geom_sf(data = OR_sf, fill = "#009474") +
-        geom_point(data = reactive_df(), aes(label = Common_Name, x = Longitude, y = Latitude)) +
-        coord_sf() +
-        theme_void() +
-        labs(title = "Wastewater Facilities in Oregon")
-    })
-
-    output$map <- renderPlotly({
-            ggplotly(p1())
+    popup_content <- paste0("<b>", working_df$Common_Name, "</b></br>",
+                            "Location: ", toTitleCase(tolower(working_df$Location)), ", ", working_df$City, ", ", working_df$State, "</br>",
+                            "Basin: ", working_df$basin, "</br>",
+                            "Technology: ", working_df$type1)
+    
+    output$map <- renderLeaflet({
+        leaflet(reactive_df(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
+            addTiles() %>%
+            addCircleMarkers(lng = ~Longitude,
+                             lat = ~Latitude, 
+                             color = "maroon",
+                             opacity = 0.5,
+                             popup = popup_content,
+                             radius = 4) 
     })
     
     # Septic-------------------------------------------------------------------------------------------------------------
