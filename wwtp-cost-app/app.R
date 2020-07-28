@@ -60,6 +60,28 @@ usda_cost <- usda_cost %>%
 
     usda_cost$Latitude[19] <- 45.2965
     usda_cost$Longitude[19] <- -117.8080
+    
+usda_cost <- usda_cost %>%
+    mutate(
+        basic_treatment = case_when(
+            Treatment %in% c("Anaerobic Lagoons, Chlorination, Dechlorization",
+                             "Aerated Lagoons",
+                             "Anaerobic Lagoons, Aerated Lagoons",
+                             "Anaerobic Lagoons, Aerated Lagoons, Chlorination",
+                             "Stabilization Ponds, Chlorination",
+                             "Stabilization Ponds") ~ "Lagoons",
+            Treatment %in% c("Activated Sludge",
+                             "Activated Sludge, Phosphorus Removal, Ultraviolet",
+                             "Chlorination, Sedimentation, Activated Sludge",
+                             "Activated Sludge, Chlorination, Dechlorization, Sedimentation, Anaerobic Lagoons, Aerated Lagoons",
+                             "Activated Sludge, Disinfection with Ozone",
+                             "Ultraviolet, Activated Sludge") ~ "Activated Sludge",
+            Treatment %in% c("Aeration, Disinfection",
+                             NA,
+                             "Chlorination",
+                             "Sedimentation, Ultraviolet") ~ "Other"
+        )
+    )
 
 # UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
@@ -106,6 +128,9 @@ ui <- navbarPage(
                                      min = 0,
                                      max = 22000000,
                                      value = 22000000),
+                         checkboxGroupInput("cost_type", label = "Technology Type",
+                                            choices = list("Lagoons", "Activated Sludge", "Other"),
+                                            selected = list("Lagoons", "Activated Sludge", "Other")),
                          submitButton("Generate Plot")
                      ),
                      mainPanel(
@@ -248,7 +273,8 @@ server <- function(input, output) {
     # Cost Map ----------------------------------------------------------------------------------------------------------
     usda_react <- reactive({
         usda_cost %>%
-            dplyr::filter(`Total Cost` <= input$totalcost)
+            dplyr::filter(`Total Cost` <= input$totalcost) %>%
+            dplyr::filter(basic_treatment %in% input$cost_type)
     })
     
     output$costmap <- renderLeaflet({
