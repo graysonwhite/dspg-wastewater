@@ -1,0 +1,25 @@
+---
+title: "Bayesian Cost Modeling"
+author: "Grayson White"
+date: "7/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load packages
+library(tidyverse)
+library(tidymodels)
+```
+
+```{r}
+# Load data
+usda_cost <- read_csv("../usda_cost.csv")
+usda_cost <- usda_cost %>%
+  select(-X1) %>%
+  rename(Population = Population.x)
+```
+
