@@ -1,0 +1,322 @@
+---
+title: "example_models"
+date: "7/29/2020"
+output: html_document
+---
+
+```{r, eval = FALSE}
+# setup: packages, data, resample, basic recipe ------------------------
+library(stacks)
+library(tune)
+library(rsample)
+library(parsnip)
+library(workflows)
+library(recipes)
+library(yardstick)
+data("penguins", package = "palmerpenguins")
+
+penguins <- penguins[!is.na(penguins$sex),]
+penguins$year <- as.factor(penguins$year)
+
+set.seed(1)
+
+ctrl_grid <- 
+  tune::control_grid(
+    save_pred = TRUE,
+    save_workflow = TRUE
+  )
+
+ctrl_res <- 
+  tune::control_resamples(
+    save_pred = TRUE,
+    save_workflow = TRUE
+  )
+
+penguins_split <- rsample::initial_split(penguins)
+penguins_train <- rsample::training(penguins_split)
+penguins_test  <- rsample::testing(penguins_split)
+
+folds <- rsample::vfold_cv(penguins_train, v = 5)
+
+penguins_reg_rec <- 
+  recipes::recipe(body_mass_g ~ ., data = penguins_train) %>%
+  recipes::step_dummy(recipes::all_nominal()) %>%
+  recipes::step_zv(recipes::all_predictors())
+
+metric <- yardstick::metric_set(yardstick::rmse)
+
+# linear regression ---------------------------------------
+lin_reg_spec <-
+  parsnip::linear_reg() %>%
+  parsnip::set_engine("lm")
+
+reg_wf_lr <- 
+  workflows::workflow() %>%
+  workflows::add_model(lin_reg_spec) %>%
+  workflows::add_recipe(penguins_reg_rec)
+
+set.seed(1)
+reg_res_lr <- 
+  tune::fit_resamples(
+    object = reg_wf_lr,
+    resamples = folds,
+    metrics = metric,
+    control = ctrl_res
+  )
+
+# SVM regression ----------------------------------
+svm_spec <- 
+  parsnip::svm_rbf(
+    cost = tune::tune(), 
+    rbf_sigma = tune::tune()
+  ) %>%
+  parsnip::set_engine("kernlab") %>%
+  parsnip::set_mode("regression")
+
+reg_wf_svm <- 
+  workflows::workflow() %>%
+  workflows::add_model(svm_spec) %>%
+  workflows::add_recipe(penguins_reg_rec)
+
+set.seed(9852)
+reg_res_svm <- 
+  tune::tune_grid(
+    object = reg_wf_svm,
+    resamples = folds, 
+    grid = 5,
+    control = ctrl_grid
+  )
+
+# spline regression ---------------------------------------
+spline_rec <- 
+  penguins_reg_rec %>%
+  recipes::step_ns(bill_length_mm, deg_free = tune::tune("length")) %>%
+  recipes::step_ns(bill_depth_mm, deg_free = tune::tune("depth"))
+
+reg_wf_sp <- 
+  workflows::workflow() %>%
+  workflows::add_model(lin_reg_spec) %>%
+  workflows::add_recipe(spline_rec)
+
+set.seed(2425)
+reg_res_sp <- 
+  tune::tune_grid(
+    object = reg_wf_sp,
+    resamples = folds,
+    metrics = metric,
+    control = ctrl_grid
+  )
+
+# classification - preliminaries -----------------------------------
+penguins_class_rec <- 
+  recipes::recipe(year ~ ., data = penguins_train) %>%
+  recipes::step_dummy(recipes::all_nominal(), -year) %>%
+  recipes::step_zv(recipes::all_predictors()) %>%
+  recipes::step_normalize(recipes::all_numeric())
+
+# random forest classification --------------------------------------
+rand_forest_spec <- 
+  parsnip::rand_forest(
+    mtry = tune::tune(),
+    trees = 500,
+    min_n = tune::tune()
+  ) %>%
+  parsnip::set_mode("classification") %>%
+  parsnip::set_engine("ranger")
+
+class_wf_rf <-
+  workflows::workflow() %>%
+  workflows::add_recipe(penguins_class_rec) %>%
+  workflows::add_model(rand_forest_spec)
+
+set.seed(9061)
+class_res_rf <- 
+  tune::tune_grid(
+    object = class_wf_rf, 
+    resamples = folds, 
+    grid = 10,
+    control = ctrl_grid
+  )
+
+# neural network classification -------------------------------------
+nnet_spec <-
+  mlp(hidden_units = 5, penalty = 0.01, epochs = 100) %>%
+  set_mode("classification") %>%
+  set_engine("nnet")
+
+class_wf_nn <- 
+  workflows::workflow() %>%
+  workflows::add_recipe(penguins_class_rec) %>%
+  workflows::add_model(nnet_spec)
+
+set.seed(1)
+class_res_nn <-
+  tune::fit_resamples(
+    object = class_wf_nn, 
+    resamples = folds, 
+    control = ctrl_res
+  )
+
+# binary classification --------------------------------
+penguins_2_class_rec <- 
+  recipes::recipe(sex ~ ., data = penguins_train) %>%
+  recipes::step_dummy(recipes::all_nominal(), -sex) %>%
+  recipes::step_zv(recipes::all_predictors()) %>%
+  recipes::step_normalize(recipes::all_numeric())
+
+set.seed(1)
+rand_forest_spec_2 <- 
+  parsnip::rand_forest(
+    mtry = tune(),
+    trees = 500,
+    min_n = tune()
+  ) %>%
+  parsnip::set_mode("classification") %>%
+  parsnip::set_engine("ranger")
+
+log_wf_rf <-
+  workflows::workflow() %>%
+  workflows::add_recipe(penguins_2_class_rec) %>%
+  workflows::add_model(rand_forest_spec_2)
+
+set.seed(6651)
+log_res_rf <- 
+  tune::tune_grid(
+    object = log_wf_rf, 
+    resamples = folds, 
+    grid = 10,
+    control = ctrl_grid
+  )
+
+nnet_spec_2 <-
+  parsnip::mlp(epochs = 100, hidden_units = 5, penalty = 0.1) %>%
+  parsnip::set_mode("classification") %>%
+  parsnip::set_engine("nnet", verbose = 0)
+
+log_wf_nn <- 
+  workflows::workflow() %>%
+  workflows::add_recipe(penguins_2_class_rec) %>%
+  workflows::add_model(nnet_spec_2)
+
+set.seed(1)
+log_res_nn <-
+  tune::fit_resamples(
+    object = log_wf_nn, 
+    resamples = folds, 
+    control = ctrl_res
+  )
+```
+
+```{r, eval = FALSE, include = FALSE}
+# save resamples -------------------------------------
+usethis::use_data(reg_res_lr, overwrite = TRUE)
+usethis::use_data(reg_res_svm, overwrite = TRUE)
+usethis::use_data(reg_res_sp, overwrite = TRUE)
+usethis::use_data(class_res_rf, overwrite = TRUE)
+usethis::use_data(class_res_nn, overwrite = TRUE)
+usethis::use_data(log_res_rf, overwrite = TRUE)
+usethis::use_data(log_res_nn, overwrite = TRUE)
+usethis::use_data(penguins_train, overwrite = TRUE)
+usethis::use_data(penguins_test, overwrite = TRUE)
+```
+
+```{r, eval = FALSE, include = FALSE}
+# Additionally, some helper model objects for use in unit tests.
+
+# Stacks
+# ------------------------------------------------------------------------
+st_0 <- stacks()
+
+st_reg_1 <- 
+  stacks() %>%
+  stack_add(reg_res_svm)
+
+st_reg_1_ <-
+  st_reg_1 %>%
+  stack_blend()
+
+st_reg_1__ <-
+  st_reg_1_ %>%
+  stack_fit()
+
+st_reg_2 <- 
+  stacks() %>%
+  stack_add(reg_res_svm) %>%
+  stack_add(reg_res_sp)
+
+st_class_1 <- 
+  stacks() %>%
+  stack_add(class_res_rf)
+
+st_class_1_ <-
+  st_class_1 %>%
+  stack_blend()
+
+st_class_1__ <- 
+  st_class_1_ %>%
+  stack_fit()
+
+st_class_2 <- 
+  st_class_1 %>%
+  stack_add(class_res_nn)
+
+st_log_1 <- 
+  stacks() %>%
+  stack_add(log_res_rf)
+
+st_log_1_ <-
+  st_log_1 %>%
+  stack_blend()
+
+st_log_1__ <-
+  st_log_1_ %>%
+  stack_fit()
+
+st_log_2 <- 
+  st_log_1 %>%
+  stack_add(log_res_nn)
+
+# Resampling Objects
+# ------------------------------------------------------------------------
+# additional fitting/tuning results to test sensitivity to
+# different resampling schemes.
+folds2 <- rsample::vfold_cv(penguins_train, v = 3)
+folds3 <- rsample::vfold_cv(penguins_train, v = 5, repeats = 2)
+folds4 <- rsample::bootstraps(penguins_train)
+folds5 <- rsample::mc_cv(penguins_train)
+
+reg_res_svm_2 <- 
+  tune::tune_grid(
+    object = reg_wf_svm,
+    resamples = folds2, 
+    grid = 5,
+    control = control_stack_grid()
+  )
+
+reg_res_svm_3 <- 
+  tune::tune_grid(
+    object = reg_wf_svm,
+    resamples = folds3, 
+    grid = 5,
+    control = control_stack_grid()
+  )
+  
+reg_res_svm_4 <- 
+  tune::tune_grid(
+    object = reg_wf_svm,
+    resamples = folds4, 
+    grid = 5,
+    control = control_stack_grid()
+  )
+
+reg_res_svm_5 <- 
+  tune::tune_grid(
+    object = reg_wf_svm,
+    resamples = folds5, 
+    grid = 5,
+    control = control_stack_grid()
+  )
+
+# save the environment in an .Rda and load in unit tests
+save.image(file = "tests/testthat/helper_data.Rda", version = 2)
+```

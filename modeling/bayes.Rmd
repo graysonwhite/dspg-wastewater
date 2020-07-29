@@ -23,3 +23,32 @@ usda_cost <- usda_cost %>%
   rename(Population = Population.x)
 ```
 
+```{r}
+# Make the model
+## Set seed
+set.seed(3737)
+
+## Specify priors
+prior_dist <- rstanarm::student_t(df = 1)
+
+## Create model
+bayes_mod <-
+  linear_reg() %>% 
+  set_engine("stan", 
+             prior_intercept = prior_dist, 
+             prior = prior_dist) 
+
+## Train
+bayes_fit <-
+  bayes_mod %>%
+  fit(`Total Cost` ~ Population + basic_treatment, data = usda_cost)
+
+bayes_fit
+```
+
+```{r}
+m1 <- lm(`Total Cost` ~ Population + basic_treatment, data = usda_cost)
+summary(m1)
+```
+
+
