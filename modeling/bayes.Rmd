@@ -87,6 +87,11 @@ tidy(freq_fit)
 ```
 
 
+```{r}
+library(rstanarm)
+```
+
+
 
 
 
