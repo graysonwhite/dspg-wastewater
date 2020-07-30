@@ -21,6 +21,16 @@ usda_cost <- read_csv("../usda_cost.csv")
 usda_cost <- usda_cost %>%
   select(-X1) %>%
   rename(Population = Population.x)
+
+usda_cost <- usda_cost %>%
+  mutate(
+    has_pumps = case_when(
+      Collection %in% c("Conventional Gravity, Effluent Pumps",
+                        "Effluent Pumps", "Effluent Pumps, Conventional Gravity",
+                        "Conventional Gravity, Effluent Pumps, Small Diameter Gravity") ~ TRUE,
+      Collection %in% c("Conventional Gravity") ~ FALSE
+    )
+    )
 ```
 
 ```{r}
@@ -29,26 +39,54 @@ usda_cost <- usda_cost %>%
 set.seed(3737)
 
 ## Specify priors
-prior_dist <- rstanarm::student_t(df = 1)
+prior_dist <- rstanarm::student_t(df = 1, location = 0, scale = 2)
+
+## Split train/test
+wwtp_split <- usda_cost %>%
+  initial_split()
+
+wwtp_train <- training(wwtp_split)
+wwtp_test <- testing(wwtp_split)
 
 ## Create model
 bayes_mod <-
   linear_reg() %>% 
   set_engine("stan", 
              prior_intercept = prior_dist, 
-             prior = prior_dist) 
+             prior = prior_dist) %>%
+  translate()
 
 ## Train
 bayes_fit <-
   bayes_mod %>%
-  fit(`Total Cost` ~ Population + basic_treatment, data = usda_cost)
+  fit(log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps,
+      data = wwtp_train)
+
+bayes_fit$fit
+bayes_fit$fit$coefficients
 
 bayes_fit
+
 ```
 
 ```{r}
-m1 <- lm(`Total Cost` ~ Population + basic_treatment, data = usda_cost)
-summary(m1)
+# Frequentist
+## create model
+freq_mod <- linear_reg() %>%
+  set_engine("lm")
+
+## train
+freq_fit <- 
+  freq_mod %>%
+  fit(`Total Cost` ~ Population + basic_treatment + has_pumps,
+      data = wwtp_train)
+freq_fit
+freq_fit$fit$coefficients
+
+tidy(freq_fit)
 ```
+
+
+
 
 
