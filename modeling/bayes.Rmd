@@ -64,9 +64,27 @@ bayes_fit <-
 
 bayes_fit$fit
 bayes_fit$fit$coefficients
+stan_fit <- bayes_fit$fit$stanfit
+class(stan_fit)
+stan_fit
+stan_fit@sim$samples[[4]]$`beta[4]`
 
 bayes_fit
 
+
+## Visualize dist for log(pop)
+log_pop_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[1]`,
+                                          stan_fit@sim$samples[[2]]$`beta[1]`,
+                                          stan_fit@sim$samples[[3]]$`beta[1]`,
+                                          stan_fit@sim$samples[[4]]$`beta[1]`))
+ggplot(log_pop_dist_df,
+       aes(samples)) +
+  stat_function(fun = dt, args = list(df = 1)) +
+  stat_function(fun = dt, args = list(df = 1), geom = "area", aes(fill = "Prior"), alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2)
 ```
 
 ```{r}
@@ -78,7 +96,7 @@ freq_mod <- linear_reg() %>%
 ## train
 freq_fit <- 
   freq_mod %>%
-  fit(`Total Cost` ~ Population + basic_treatment + has_pumps,
+  fit(log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps,
       data = wwtp_train)
 freq_fit
 freq_fit$fit$coefficients
@@ -87,9 +105,6 @@ tidy(freq_fit)
 ```
 
 
-```{r}
-library(rstanarm)
-```
 
 
 
