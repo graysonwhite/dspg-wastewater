@@ -130,7 +130,7 @@ ui <- navbarPage(
                          leafletOutput("costmap"),
                      )
             ),
-            tabPanel("3. Cap Cost by year",
+            tabPanel("Capital cost by year",
                      sidebarPanel(
                          sliderInput("pop_3", label = "Population",
                                      min = 0,
@@ -138,7 +138,8 @@ ui <- navbarPage(
                                      value = 10000),
                          checkboxGroupInput("tech_3", label = "Technology Type",
                                             choices = list("Lagoons", "Activated Sludge", "Other"),
-                                            selected = list("Lagoons", "Activated Sludge", "Other"))
+                                            selected = list("Lagoons", "Activated Sludge", "Other")),
+                         submitButton("Generate Plot")
                      ),
                      mainPanel(
                          plotlyOutput("plot_3")
@@ -163,9 +164,23 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
-            tabPanel("Permits"),
+            tabPanel(
+                "Permits",
+                     mainPanel(
+                         fluidPage(
+                             includeMarkdown('permits.Rmd')
+                         )
+                     )
+                     ),
             tabPanel("Centralizaed vs. decentralized"),
-            tabPanel("Collection"),
+            tabPanel(
+                "Collection",
+                mainPanel(
+                    fluidPage(
+                        includeMarkdown('collection.Rmd')
+                    )
+                )
+                ),
             tabPanel("Centralized technologies"),
             tabPanel(
                 "Funding resources",
@@ -288,21 +303,39 @@ server <- function(input, output) {
     
     # 3. Cap cost by year -----------------------------------------------------------------------------------------------
     final_cost_small$Year <- as.numeric(substr(final_cost_small$Year, start = 1, stop = 4))
-    p_3 <- ggplot(final_cost_small,
-                  aes(x = Year,
+    final_cost_small <- final_cost_small %>%
+        mutate(`Treatment Type` = basic_treatment)
+    
+    p_3_react_df <- reactive({
+        final_cost_small %>%
+            filter(Population <= input$pop_3) %>%
+            filter(`Treatment Type` %in% input$tech_3)
+    })
+    
+    p_3 <- reactive({
+        ggplot(p_3_react_df(),
+                  aes(text = paste0("Entity: ", toTitleCase(tolower(Entity))),
+                      x = Year,
                       y = `Total Cost`,
                       size = Population,
-                      color = basic_treatment)) +
+                      color = `Treatment Type`)) +
         geom_point(alpha = 0.75) +
         scale_color_viridis_d() +
+        scale_y_continuous(labels = comma) +
         theme_bw() +
         theme(
             legend.position = "bottom"
         ) +
         labs(color = "Treatment Type",
-             title = "Total Cost of WWTP by Year")
+             title = "Total Cost of WWTP by Year, Sized by Population")
+    })
+    
     output$plot_3 <- renderPlotly(
-        p_3
+        ggplotly(p_3()) %>%
+            layout(legend = list(orientation = "h",   
+                                 xanchor = "center",  
+                                 y = -0.1)) %>%
+            layout(autosize = F, width = 600, height = 600)
     )
     
     # Data --------------------------------------------------------------------------------------------------------------
