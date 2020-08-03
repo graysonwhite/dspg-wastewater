@@ -13,8 +13,11 @@ library(markdown)
 library(leaflet)
 library(maps)
 library(tools)
+library(LaCroixColoR)
+library(viridis)
 
 # Load data -------------------------------------------------------------------------------------------------------------
+final_cost_small <- read_csv("final_cost_small.csv")
 working_df <- read_csv("working_df.csv")
 usda_cost <- read_excel("wastewater-projects.xlsx")
 
@@ -127,6 +130,20 @@ ui <- navbarPage(
                          leafletOutput("costmap"),
                      )
             ),
+            tabPanel("3. Cap Cost by year",
+                     sidebarPanel(
+                         sliderInput("pop_3", label = "Population",
+                                     min = 0,
+                                     max = 10000,
+                                     value = 10000),
+                         checkboxGroupInput("tech_3", label = "Technology Type",
+                                            choices = list("Lagoons", "Activated Sludge", "Other"),
+                                            selected = list("Lagoons", "Activated Sludge", "Other"))
+                     ),
+                     mainPanel(
+                         plotlyOutput("plot_3")
+                     )
+                     ),
             tabPanel("Misc. Data Visualizations",
                      mainPanel(
                          width = 12,
@@ -268,6 +285,25 @@ server <- function(input, output) {
             theme_bw() +
             scale_y_continuous(labels = point)
     })
+    
+    # 3. Cap cost by year -----------------------------------------------------------------------------------------------
+    final_cost_small$Year <- as.numeric(substr(final_cost_small$Year, start = 1, stop = 4))
+    p_3 <- ggplot(final_cost_small,
+                  aes(x = Year,
+                      y = `Total Cost`,
+                      size = Population,
+                      color = basic_treatment)) +
+        geom_point(alpha = 0.75) +
+        scale_color_viridis_d() +
+        theme_bw() +
+        theme(
+            legend.position = "bottom"
+        ) +
+        labs(color = "Treatment Type",
+             title = "Total Cost of WWTP by Year")
+    output$plot_3 <- renderPlotly(
+        p_3
+    )
     
     # Data --------------------------------------------------------------------------------------------------------------
     output$cost_data <- renderDataTable({
