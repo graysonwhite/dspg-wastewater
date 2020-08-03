@@ -98,6 +98,11 @@ ui <- navbarPage(
     tabPanel(
         "Data Visualizations & Maps",
         tabsetPanel(
+            tabPanel("Capital Cost by Dry Design Capacity (MGD)",
+                     sidebarPanel(
+                         
+                     )
+                    ),
             tabPanel("Wastewater Treatment Plants",
                      sidebarPanel(
                          sliderInput("capacityslider", label = "Dry Design Capacity", min = 0, max = 1, value = 1),
@@ -105,21 +110,6 @@ ui <- navbarPage(
                      ),
                      mainPanel(
                          leafletOutput("map")
-                     )
-                     ),
-            tabPanel("Septic"),
-            tabPanel("Misc. Data Visualizations",
-                     mainPanel(
-                         width = 12,
-                         div(plotOutput("plot1", width = 600, height = 500), align = "center"),
-                         div(plotOutput("plot2", width = 600, height = 500), align = "center"),
-                         div(plotOutput("plot3", width = 600, height = 500), align = "center")
-                     )
-                     ),
-            tabPanel("Data",
-                     mainPanel(
-                         width = 12,
-                         dataTableOutput("cost_data")
                      )
                      ),
             tabPanel("Cost Map",
@@ -135,28 +125,43 @@ ui <- navbarPage(
                      ),
                      mainPanel(
                          leafletOutput("costmap"),
-                         )
+                     )
+            ),
+            tabPanel("Misc. Data Visualizations",
+                     mainPanel(
+                         width = 12,
+                         div(plotOutput("plot1", width = 600, height = 500), align = "center"),
+                         div(plotOutput("plot2", width = 600, height = 500), align = "center"),
+                         div(plotOutput("plot3", width = 600, height = 500), align = "center")
+                     )
+                     ),
+            tabPanel("Data",
+                     mainPanel(
+                         width = 12,
+                         dataTableOutput("cost_data")
+                     )
                      )
         )
         ),
     tabPanel(
-        "Education",
-        sidebarPanel(),
+        "Community Wastewater Treatment",
         tabsetPanel(
-            tabPanel("Treatment"),
-            tabPanel("Collection")
-        )
-    ),
-    tabPanel(
-        "Funding Resources",
-        mainPanel(
-            fluidPage(
-                includeMarkdown('funding.Rmd')
+            tabPanel("Permits"),
+            tabPanel("Centralizaed vs. decentralized"),
+            tabPanel("Collection"),
+            tabPanel("Centralized technologies"),
+            tabPanel(
+                "Funding resources",
+                mainPanel(
+                    fluidPage(
+                        includeMarkdown('funding.Rmd')
+                    )
+                )
             )
         )
     ),
     tabPanel(
-        "Costs Estimator",
+        "Statistical Cost Model",
         sidebarPanel()
     )
     )

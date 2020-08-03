@@ -8,13 +8,17 @@ output: html_document
 
 This web-based application includes tools for cost modeling and planning your potential wastewater treatment plant. It also includes educational resources for funding your wastewater treatment plant and for learning about options in regards to a centralized wastewater treatment system. It was created during summer 2020 for the Data Science for the Public Good program at Oregon State University.
 
-## Panels
+## Purpose of tool
 
-### Maps
+to do things
 
-### Education
+## Contents
 
-### Funding Resources
+#### Data Visualizations & Maps
+
+#### Community Wastewater Treatment
+
+#### Statistical Cost Model
 
 ## Creators
 
