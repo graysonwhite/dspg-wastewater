@@ -94,10 +94,10 @@ ui <- navbarPage(
         "Overview",
         mainPanel(
             fluidPage(
-                includeMarkdown('overview.Rmd')
+               includeMarkdown('overview.Rmd')
+                )
             )
-        )
-    ),
+        ),
     tabPanel(
         "Data Visualizations & Maps",
         tabsetPanel(
@@ -143,6 +143,11 @@ ui <- navbarPage(
                      ),
                      mainPanel(
                          plotlyOutput("plot_3")
+                     )
+                     ),
+            tabPanel("Stacked Histogram",
+                     mainPanel(
+                         div(plotlyOutput("stacked_hist"), align = "center")
                      )
                      ),
             tabPanel("Misc. Data Visualizations",
@@ -338,6 +343,25 @@ server <- function(input, output) {
             layout(autosize = F, width = 600, height = 600)
     )
     
+    # Stacked histogram (#5) --------------------------------------------------------------------------------------------
+    p_5 <- ggplot(final_cost_small,
+                  aes(x = Population,
+                      fill = `Treatment Type`)) +
+        geom_histogram(bins = 10) +
+        scale_fill_viridis_d() +
+        theme_bw() +
+        theme(
+            legend.position = "bottom"
+        )
+    
+    output$stacked_hist <- renderPlotly({
+        ggplotly(p_5, tooltip = c("count", "fill")) %>%
+            layout(legend = list(orientation = "h",   
+                                 xanchor = "center",  
+                                 y = -0.1)) %>%
+            layout(autosize = F, width = 600, height = 600)
+    })
+    
     # Data --------------------------------------------------------------------------------------------------------------
     output$cost_data <- renderDataTable({
         datatable(
@@ -345,26 +369,28 @@ server <- function(input, output) {
         )
     })
     # Cost Map ----------------------------------------------------------------------------------------------------------
-    usda_react <- reactive({
-        usda_cost %>%
+    costmap_react_final <- reactive({
+        final_cost_small %>%
             dplyr::filter(`Total Cost` <= input$totalcost) %>%
             dplyr::filter(basic_treatment %in% input$cost_type)
     })
     
+    pal <- colorFactor(c("red", "green", "blue"), unique(final_cost_small$basic_treatment))
+    
     output$costmap <- renderLeaflet({
-        leaflet(usda_react(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
+        leaflet(costmap_react_final(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
             addTiles() %>%
             addCircleMarkers(lng = ~Longitude,
                              lat = ~Latitude, 
-                             color = "maroon",
+                             color = ~pal(basic_treatment),
                              opacity = 0.5,
                              popup = paste0(
-                                 "<b>", toTitleCase(tolower(usda_react()$Entity)), "</b></br>",
-                                 "Treatment: ", usda_react()$Treatment, "</br>",
-                                 "Collection: ", usda_react()$Collection, "</br>",
-                                 "Discharge: ", usda_react()$Discharge, "</br>",
-                                 "Total Cost: ", dollar(usda_react()$`Total Cost`), "</br>",
-                                 "Construction Cost: ", dollar(usda_react()$`Construction Cost`), "</br>"
+                                 "<b>", toTitleCase(tolower(costmap_react_final()$Entity)), "</b></br>",
+                                 "Treatment: ", costmap_react_final()$Treatment, "</br>",
+                                 "Collection: ", costmap_react_final()$Collection, "</br>",
+                                 "Discharge: ", costmap_react_final()$Discharge, "</br>",
+                                 "Total Cost: ", dollar(costmap_react_final()$`Total Cost`), "</br>",
+                                 "Construction Cost: ", dollar(costmap_react_final()$`Construction Cost`), "</br>"
                                  ),
                              radius = 4) 
     })
