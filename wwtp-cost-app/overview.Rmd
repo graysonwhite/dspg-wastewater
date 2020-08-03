@@ -23,7 +23,7 @@ Contains a tool outlining capital costs of collection and treatment facilities b
 
 This application was created by:    
 [Grayson White](http://www.graysonwhite.com), BA Mathematics (concentration statistics), Reed College,    
-Jakob Oetinger, MS Statistics, Oregon State University, and    
+[Jakob Oetinger](https://www.linkedin.com/in/jake-oetinger-779b83178/), MS Statistics, Oregon State University, and    
 [Amanda Reding](https://www.linkedin.com/in/amanda-reding/), BS Natural Resources (water resources), Oregon State University.    
-Under the supervision of    
+Under the supervision of:    
 [Dr. Christine Kelly](https://cbee.oregonstate.edu/people/christine-kelly), Chemical, Biological & Environmental Engineering Professor, Oregon State University

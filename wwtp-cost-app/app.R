@@ -164,6 +164,16 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
+            tabPanel("Centralizaed vs. decentralized"),
+            tabPanel("Centralized technologies"),
+            tabPanel(
+                "Collection",
+                mainPanel(
+                    fluidPage(
+                        includeMarkdown('collection.Rmd')
+                    )
+                )
+            ),
             tabPanel(
                 "Permits",
                      mainPanel(
@@ -172,16 +182,6 @@ ui <- navbarPage(
                          )
                      )
                      ),
-            tabPanel("Centralizaed vs. decentralized"),
-            tabPanel(
-                "Collection",
-                mainPanel(
-                    fluidPage(
-                        includeMarkdown('collection.Rmd')
-                    )
-                )
-                ),
-            tabPanel("Centralized technologies"),
             tabPanel(
                 "Funding resources",
                 mainPanel(
