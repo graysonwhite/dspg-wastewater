@@ -56,7 +56,8 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         leafletOutput("map")
+                         leafletOutput("map"),
+                         includeMarkdown("wwtp_plot_text.Rmd")
                      )
                      ),
             tabPanel("Cost Map",
@@ -72,6 +73,7 @@ ui <- navbarPage(
                      ),
                      mainPanel(
                          leafletOutput("costmap"),
+                         includeMarkdown("costmap_text.Rmd")
                      )
             ),
             tabPanel("Capital cost by year",
@@ -86,7 +88,8 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         plotlyOutput("plot_3")
+                         plotlyOutput("plot_3"),
+                         includeMarkdown("capcost_year_text.Rmd")
                      )
                      ),
             tabPanel("Stacked Histogram",
@@ -269,15 +272,18 @@ server <- function(input, output) {
                       y = `Total Cost`,
                       size = Population,
                       color = `Treatment Type`)) +
-        geom_point(alpha = 0.75) +
+        geom_point(alpha = 0.75, position = "jitter") +
         scale_color_viridis_d() +
         scale_y_continuous(labels = comma) +
         theme_bw() +
         theme(
-            legend.position = "bottom"
+            legend.position = "bottom",
+            axis.text.y = element_text(angle = 90, vjust = 1, hjust=0)
         ) +
         labs(color = "Treatment Type",
-             title = "Total Cost of WWTP by Year, Sized by Population")
+             title = "Total Cost of WWTP by Year, Sized by Population",
+             y = "Total Cost ($)",
+             x = "Year Built")
     })
     
     output$plot_3 <- renderPlotly(
@@ -297,7 +303,8 @@ server <- function(input, output) {
         theme_bw() +
         theme(
             legend.position = "bottom"
-        )
+        ) +
+        labs(title = "Population Served by Treatment Type")
     
     output$stacked_hist <- renderPlotly({
         ggplotly(p_5, tooltip = c("count", "fill")) %>%

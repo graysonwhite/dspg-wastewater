@@ -4,7 +4,7 @@ output: html_document
 
 ## Overview
 
-#### This web-based application includes visualization and tools for understanding, planning, and cost modeling small, centralized, rural Oregon wastewater treatment facilities, and information on decentralized treatment. Intended audiences of this application include the interested public, sewer boards, councils, planners, and researchers. This application was developed by a team of students working with the [OSU Data Science for Public Good program.](https://workspace.oregonstate.edu/data-science-for-the-public-good-get-involved-propose-a-project)
+#### This web-based application includes visualization and tools for understanding, planning, and cost modeling small, centralized, rural Oregon wastewater treatment facilities, and information on decentralized treatment. Intended audiences of this application include the interested public, sewer boards, councils, planners, and researchers. We have characterized *small scale* wastewater treatment plant, meaning that we only consider treatment plants with a dry design capacity of less than or equal to 1 MGD. This application was developed by a team of students working with the [OSU Data Science for Public Good program.](https://workspace.oregonstate.edu/data-science-for-the-public-good-get-involved-propose-a-project)
 
 ## Contents
 
