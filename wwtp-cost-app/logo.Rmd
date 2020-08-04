@@ -1,7 +1,0 @@
----
-output: html_document
----
-
-![](dspgosu.png)
-
-
