@@ -2,28 +2,23 @@
 output: html_document
 ---
 
-# Rural Wastewater Facility Cost Modeling & Planning Tools
-
 ## Overview
 
-This web-based application includes visualization and tools for understanding, planning, and cost modeling small, centralized, rural Oregon wastewater treatment facilities, and information on decentralized treatment. Intended audiences of this application include the interested public, sewer boards, councils, planners, and researchers. This application was developed by a team of students working with the [OSU Data Science for Public Good program.](https://workspace.oregonstate.edu/data-science-for-the-public-good-get-involved-propose-a-project)
+#### This web-based application includes visualization and tools for understanding, planning, and cost modeling small, centralized, rural Oregon wastewater treatment facilities, and information on decentralized treatment. Intended audiences of this application include the interested public, sewer boards, councils, planners, and researchers. This application was developed by a team of students working with the [OSU Data Science for Public Good program.](https://workspace.oregonstate.edu/data-science-for-the-public-good-get-involved-propose-a-project)
 
 ## Contents
 
-#### Data Visualizations & Maps:
-Contains dynamic, graphic information illustrating current wastewater treatment practices in rural communities in Oregon.
+#### **Data Visualizations & Maps:** Contains dynamic, graphic information illustrating current wastewater treatment practices in rural communities in Oregon.
 
-#### Community Wastewater Treatment: 
-Contains background material on centralized and decentralized wastewater treatment, permitting, and funding resources.
+#### **Community Wastewater Treatment:** Contains background material on centralized and decentralized wastewater treatment, permitting, and funding resources.
 
-#### Statistical Cost Model
-Contains a tool outlining capital costs of collection and treatment facilities by technology.
+#### **Statistical Cost Model:** Contains a tool outlining capital costs of collection and treatment facilities by technology.
 
 ## Creators
 
-This application was created by:    
-[Grayson White](http://www.graysonwhite.com), BA Mathematics (concentration statistics), Reed College,    
-[Jakob Oetinger](https://www.linkedin.com/in/jake-oetinger-779b83178/), MS Statistics, Oregon State University, and    
-[Amanda Reding](https://www.linkedin.com/in/amanda-reding/), BS Natural Resources (water resources), Oregon State University.    
-Under the supervision of:    
-[Dr. Christine Kelly](https://cbee.oregonstate.edu/people/christine-kelly), Chemical, Biological & Environmental Engineering Professor, Oregon State University
+#### This application was created by:    
+#### [Grayson White](http://www.graysonwhite.com), BA Mathematics (concentration statistics), Reed College,    
+#### [Jakob Oetinger](https://www.linkedin.com/in/jake-oetinger-779b83178/), MS Statistics, Oregon State University, and    
+#### [Amanda Reding](https://www.linkedin.com/in/amanda-reding/), BS Natural Resources (water resources), Oregon State University.    
+#### Under the supervision of:    
+#### [Dr. Christine Kelly](https://cbee.oregonstate.edu/people/christine-kelly), Chemical, Biological & Environmental Engineering Professor, Oregon State University

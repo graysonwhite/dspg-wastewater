@@ -15,6 +15,7 @@ library(maps)
 library(tools)
 library(LaCroixColoR)
 library(viridis)
+library(shinyWidgets)
 
 # Load data -------------------------------------------------------------------------------------------------------------
 final_cost_small <- read_csv("final_cost_small.csv")
@@ -89,13 +90,22 @@ usda_cost <- usda_cost %>%
 # UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
     theme = shinytheme("united"),
-    title = "Visualizing Data of WWTPs in rural Oregon",
+    title = "Small Scale Wastewater Treatment in Oregon",
     tabPanel(
         "Overview",
         mainPanel(
             fluidPage(
-               includeMarkdown('overview.Rmd')
+                setBackgroundImage(
+                    src = "bg25.png"
+                ),
+                fluidRow(
+                    column(12,
+                           includeMarkdown('overview.Rmd')
+                           ),
+                    column(12,
+                           img(src='dspgosu.png', align = "center", height = '500px', width = '700px'))
                 )
+            )
             )
         ),
     tabPanel(
@@ -146,6 +156,7 @@ ui <- navbarPage(
                      )
                      ),
             tabPanel("Stacked Histogram",
+                     setBackgroundColor("white"),
                      mainPanel(
                          div(plotlyOutput("stacked_hist"), align = "center")
                      )
@@ -169,7 +180,7 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
-            tabPanel("Centralizaed vs. decentralized"),
+            tabPanel("Centralized vs. decentralized"),
             tabPanel("Centralized technologies"),
             tabPanel(
                 "Collection",
