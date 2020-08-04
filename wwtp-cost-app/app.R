@@ -59,9 +59,18 @@ ui <- navbarPage(
     tabPanel(
         "Data Visualizations & Maps",
         tabsetPanel(
-            tabPanel("Capital Cost by Dry Design Capacity (MGD)",
+            tabPanel("Capital Cost by Design Capacity",
                      sidebarPanel(
-                         
+                         sliderInput("costSlider", label = "Total Cost (Million Dollars)", min = 0, max = 30, value = 30, step = 0.1),
+                         sliderInput("mgdSlider", label = "Dry Design Capacity (MGD)", min = 0, max = 1, value = 1),
+                         sliderInput("popSlider", label = "Population", min = 0, max = 10000, value = 10000),
+                         checkboxGroupInput("typeCheckBox", label = "Technology Type",
+                                            choices = list("Lagoons", "Activated Sludge", "Other"),
+                                            selected = list("Lagoons", "Activated Sludge", "Other")),
+                         submitButton("Regenerate Plot")
+                     ),
+                     mainPanel(
+                         plotlyOutput("cap_mgd")
                      )
                     ),
             tabPanel("Wastewater Treatment Plants",
@@ -111,8 +120,14 @@ ui <- navbarPage(
                      ),
             tabPanel("Stacked Histogram",
                      setBackgroundColor("white"),
+                     sidebarPanel(
+                         checkboxGroupInput("tech_hist", label = "Technology Type",
+                                            choices = list("Lagoons", "Activated Sludge", "Other"),
+                                            selected = list("Lagoons", "Activated Sludge", "Other")),
+                         submitButton("Regenerate Plot")
+                     ),
                      mainPanel(
-                         div(plotlyOutput("stacked_hist"), align = "center")
+                         plotlyOutput("stacked_hist")
                      )
                      )
             # tabPanel("Misc. Data Visualizations",
@@ -175,18 +190,48 @@ server <- function(input, output) {
     df_sf <- st_as_sf(working_df, coords = c("Longitude", "Latitude"), crs = 4326)
     OR_sf <- us_boundaries(type = "state", states = "OR")
     
+    cost_react <- reactive({ 
+        cost 
+    })
+    
+# Data Visualization & Maps ---------------------------------------------------------------------------------------------
+    # Capital Cost by Dry Design Capacity -------------------------------------------------------------------------------
+    cap_mgd_react_df <- reactive({
+        final_cost_small %>%
+            filter(`Total Cost`/1000000 <= input$costSlider) %>%
+            filter(dryDesignFlowMGD <= input$mgdSlider) %>%
+            filter(Population <= input$popSlider) %>%
+            filter(basic_treatment %in% input$typeCheckBox)
+    })
+    cap_mgd_static <- reactive({
+        ggplot(cap_mgd_react_df(),
+                             aes(x = dryDesignFlowMGD,
+                                 y = `Total Cost` / 1000000)) +
+        geom_point(color = "steelblue", size = 2) +
+        theme_bw() +
+        xlim(0,1) +
+        ylim(0,30) +
+        labs(title = "Dry Design Flow (MGD) by Total Cost",
+             y = "Total Cost (Million Dollars)",
+             x = "Dry Design Flow (MGD)")
+    })
+    
+    output$cap_mgd <- renderPlotly({
+        ggplotly(cap_mgd_static()) %>%
+            layout(legend = list(orientation = "h",   
+                                 xanchor = "center",  
+                                 y = -0.1)) %>%
+            layout(autosize = F, width = 600, height = 600) %>%
+            config(displayModeBar = F)
+    })
+        
+    # Wastewater Treatment Plants ---------------------------------------------------------------------------------------
     reactive_df <- reactive({
         working_df %>%
             filter(`Technology Type` %in% input$wwtp_type) %>%
             filter(dryDesignFlowMGD <= input$capacityslider)
     })
     
-    cost_react <- reactive({ 
-        cost 
-    })
-    
-# Data Visualization & Maps ---------------------------------------------------------------------------------------------
-    # Wastewater Treatment Plants ---------------------------------------------------------------------------------------
     output$map <- renderLeaflet({
         leaflet(reactive_df(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
             addTiles() %>%
@@ -200,7 +245,6 @@ server <- function(input, output) {
                                             "Technology: ", reactive_df()$type1),
                              radius = 4) 
     })
-    
     # Septic-------------------------------------------------------------------------------------------------------------
     
     # Misc. Data Visualizations -----------------------------------------------------------------------------------------
@@ -314,7 +358,13 @@ server <- function(input, output) {
     )
     
     # Stacked histogram (#5) --------------------------------------------------------------------------------------------
-    p_5 <- ggplot(final_cost_small,
+    hist_df <- reactive({
+        final_cost_small %>%
+            filter(basic_treatment %in% input$tech_hist)
+    })
+    
+    p_5 <- reactive({
+        ggplot(hist_df(),
                   aes(x = Population,
                       fill = `Treatment Type`)) +
         geom_histogram(bins = 10) +
@@ -324,9 +374,10 @@ server <- function(input, output) {
             legend.position = "bottom"
         ) +
         labs(title = "Population Served by Treatment Type")
+    })
     
     output$stacked_hist <- renderPlotly({
-        ggplotly(p_5, tooltip = c("count", "fill")) %>%
+        ggplotly(p_5(), tooltip = c("count", "fill")) %>%
             layout(legend = list(orientation = "h",   
                                  xanchor = "center",  
                                  y = -0.1)) %>%
