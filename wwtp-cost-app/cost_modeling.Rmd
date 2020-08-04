@@ -17,10 +17,7 @@ library(tidymodels)
 
 ```{r include = FALSE}
 # Load data
-usda_cost <- read_csv("../usda_cost.csv")
-usda_cost <- usda_cost %>%
-  select(-X1) %>%
-  rename(Population = Population.x)
+usda_cost <- read_csv("final_cost_small.csv")
 
 usda_cost <- usda_cost %>%
   mutate(

@@ -21,6 +21,8 @@ library(shinyWidgets)
 final_cost_small <- read_csv("final_cost_small.csv")
 working_df <- read_csv("working_df.csv")
 
+knitr::knit("cost_modeling.Rmd", quiet = TRUE)
+
 # UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
     theme = shinytheme("united"),
@@ -147,7 +149,9 @@ ui <- navbarPage(
     ),
     tabPanel(
         "Statistical Cost Model",
-        sidebarPanel()
+        fluidPage(
+            withMathJax(includeMarkdown("cost_modeling.md"))
+        )
     )
     )
 
