@@ -5,15 +5,11 @@ date: "8/4/2020"
 output: html_document
 ---
 
-t    
-t    
-t    
-t    
-t    
-t    
-t    
-t    
-t    
-t    
+<br>    
+<br>  
+<br>  
+<br>   
+<br>  
+<br>
 
 #### This plot shows the cost of small scale wastewater treatment plants over time. The points are sized by the population of the city/town the wastewater treatment plant is in.

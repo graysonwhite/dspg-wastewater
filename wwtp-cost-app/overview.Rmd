@@ -22,3 +22,5 @@ output: html_document
 #### [Amanda Reding](https://www.linkedin.com/in/amanda-reding/), BS Natural Resources (water resources), Oregon State University.    
 #### Under the supervision of:    
 #### [Dr. Christine Kelly](https://cbee.oregonstate.edu/people/christine-kelly), Chemical, Biological & Environmental Engineering Professor, Oregon State University
+
+<br>

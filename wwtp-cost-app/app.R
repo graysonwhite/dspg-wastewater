@@ -21,6 +21,18 @@ library(shinyWidgets)
 final_cost_small <- read_csv("final_cost_small.csv")
 working_df <- read_csv("working_df.csv")
 
+working_df <- working_df %>%
+    mutate(
+        `Technology Type` = case_when(
+            type1 %in% c("lagoons", "pre-aerated lagoons") ~ "Lagoons",
+            type1 %in% c("trickling filter", "trickling filter - high rate",
+                         "trickling filter - low rate") ~ "Trickling Filter",
+            type1 %in% c("activated sludge") ~ "Activated Sludge",
+            type1 %in% c("extended aeration", "membrance bioreactor",
+                         "recirculating gravel filter", NA, "STEP system",
+                         "oxidation ditch", "biological contactors") ~ "Other"
+        ))
+
 knitr::knit("cost_modeling.Rmd", quiet = TRUE)
 
 # UI --------------------------------------------------------------------------------------------------------------------
@@ -54,7 +66,10 @@ ui <- navbarPage(
                     ),
             tabPanel("Wastewater Treatment Plants",
                      sidebarPanel(
-                         sliderInput("capacityslider", label = "Dry Design Capacity", min = 0, max = 1, value = 1),
+                         sliderInput("capacityslider", label = "Dry Design Capacity (MGD)", min = 0, max = 1, value = 1),
+                         checkboxGroupInput("wwtp_type", label = "Technology Type",
+                                            choices = list("Lagoons", "Activated Sludge", "Trickling Filter", "Other"),
+                                            selected = list("Lagoons", "Activated Sludge", "Trickling Filter", "Other")),
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
@@ -99,21 +114,21 @@ ui <- navbarPage(
                      mainPanel(
                          div(plotlyOutput("stacked_hist"), align = "center")
                      )
-                     ),
-            tabPanel("Misc. Data Visualizations",
-                     mainPanel(
-                         width = 12,
-                         div(plotOutput("plot1", width = 600, height = 500), align = "center"),
-                         div(plotOutput("plot2", width = 600, height = 500), align = "center"),
-                         div(plotOutput("plot3", width = 600, height = 500), align = "center")
                      )
-                     ),
-            tabPanel("Data",
-                     mainPanel(
-                         width = 12,
-                         dataTableOutput("cost_data")
-                     )
-                     )
+            # tabPanel("Misc. Data Visualizations",
+            #          mainPanel(
+            #              width = 12,
+            #              div(plotOutput("plot1", width = 600, height = 500), align = "center"),
+            #              div(plotOutput("plot2", width = 600, height = 500), align = "center"),
+            #              div(plotOutput("plot3", width = 600, height = 500), align = "center")
+            #          )
+            #          ),
+            # tabPanel("Data",
+            #          mainPanel(
+            #              width = 12,
+            #              dataTableOutput("cost_data")
+            #          )
+            #          )
         )
         ),
     tabPanel(
@@ -162,6 +177,7 @@ server <- function(input, output) {
     
     reactive_df <- reactive({
         working_df %>%
+            filter(`Technology Type` %in% input$wwtp_type) %>%
             filter(dryDesignFlowMGD <= input$capacityslider)
     })
     
@@ -171,11 +187,6 @@ server <- function(input, output) {
     
 # Data Visualization & Maps ---------------------------------------------------------------------------------------------
     # Wastewater Treatment Plants ---------------------------------------------------------------------------------------
-    popup_content <- paste0("<b>", working_df$Common_Name, "</b></br>",
-                            "Location: ", toTitleCase(tolower(working_df$Location)), ", ", working_df$City, ", ", working_df$State, "</br>",
-                            "Basin: ", working_df$basin, "</br>",
-                            "Technology: ", working_df$type1)
-    
     output$map <- renderLeaflet({
         leaflet(reactive_df(), options = leafletOptions(minZoom = 6, maxZoom = 16)) %>%
             addTiles() %>%
@@ -183,85 +194,89 @@ server <- function(input, output) {
                              lat = ~Latitude, 
                              color = "maroon",
                              opacity = 0.5,
-                             popup = popup_content,
+                             popup = paste0("<b>", reactive_df()$Common_Name, "</b></br>",
+                                            "Location: ", toTitleCase(tolower(reactive_df()$Location)), ", ", reactive_df()$City, ", ", reactive_df()$State, "</br>",
+                                            "Basin: ", reactive_df()$basin, "</br>",
+                                            "Technology: ", reactive_df()$type1),
                              radius = 4) 
     })
     
     # Septic-------------------------------------------------------------------------------------------------------------
     
     # Misc. Data Visualizations -----------------------------------------------------------------------------------------
-    output$plot1 <- renderPlot({ 
-        working_df %>%
-        mutate(
-            type_plot = case_when(
-                type1 %in% c("lagoons", "pre-aerated lagoons") ~ "lagoons",
-                type1 %in% c("trickling filter", "trickling filter - high rate",
-                             "trickling filter - low rate") ~ "trickling filter",
-                type1 %in% c("activated sludge") ~ "activated sludge",
-                type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
-                             "STEP system", "oxidation ditch", "biological contactors") ~ "other/NA")) %>%
-        filter(type_plot %in% c("lagoons", "trickling filter", "activated sludge")) %>%
-        ggplot(aes(y = type_plot,
-                   x = dryDesignFlowMGD,
-                   color = type_plot,
-                   fill = type_plot)) +
-        scale_color_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
-        scale_fill_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
-        geom_violin(
-            alpha = 0.4) +
-        geom_point() +
-        theme_bw() +
-        labs(
-            x = "Dry Design Flow (MGD)",
-            y = "Technology",
-            title = "Flow of WWTPs, Grouped by Technology"
-        ) +
-        theme(
-            legend.position = "none"
-        ) +
-        xlim(0,1)
-    })
-    
-    
-    output$plot2 <- renderPlot({
-        working_df %>%
-            filter(!is.na(basin)) %>%
-            group_by(basin) %>%
-            summarize(mgd = mean(dryDesignFlowMGD, na.rm = TRUE)) %>%
-            ggplot(
-                aes(x = reorder(basin, mgd), y = mgd)
-            ) +
-            geom_col(fill = "maroon") +
-            coord_flip() +
-            theme_bw() +
-            labs(
-                y = "Average Dry Design Flow (MGD)",
-                x = "Basin",
-                title = "Average Dry Design Flow, Grouped By Basin"
-            )
-    })
-    
-    point <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
-    output$plot3 <- renderPlot({
-        cost %>%
-            group_by(type1) %>%
-            summarize(mean = mean(`Total Cost` / Population.x)) %>%
-            ggplot(aes(x = reorder(type1, mean),
-                       y = mean)) +
-            geom_col(fill = "forest green") +
-            annotate(geom = "text", x = 1, y = 2000, label = "n = 3") +
-            annotate(geom = "text", x = 2, y = 3000, label = "n = 1") +
-            annotate(geom = "text", x = 3, y = 4000, label = "n = 6") +
-            labs(x = "Type of WWTP",
-                 y = "Average Cost / Population ($/person)") +
-            theme_bw() +
-            scale_y_continuous(labels = point)
-    })
+    # output$plot1 <- renderPlot({ 
+    #     working_df %>%
+    #     mutate(
+    #         type_plot = case_when(
+    #             type1 %in% c("lagoons", "pre-aerated lagoons") ~ "lagoons",
+    #             type1 %in% c("trickling filter", "trickling filter - high rate",
+    #                          "trickling filter - low rate") ~ "trickling filter",
+    #             type1 %in% c("activated sludge") ~ "activated sludge",
+    #             type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+    #                          "STEP system", "oxidation ditch", "biological contactors") ~ "other/NA")) %>%
+    #     filter(type_plot %in% c("lagoons", "trickling filter", "activated sludge")) %>%
+    #     ggplot(aes(y = type_plot,
+    #                x = dryDesignFlowMGD,
+    #                color = type_plot,
+    #                fill = type_plot)) +
+    #     scale_color_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+    #     scale_fill_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+    #     geom_violin(
+    #         alpha = 0.4) +
+    #     geom_point() +
+    #     theme_bw() +
+    #     labs(
+    #         x = "Dry Design Flow (MGD)",
+    #         y = "Technology",
+    #         title = "Flow of WWTPs, Grouped by Technology"
+    #     ) +
+    #     theme(
+    #         legend.position = "none"
+    #     ) +
+    #     xlim(0,1)
+    # })
+    # 
+    # 
+    # output$plot2 <- renderPlot({
+    #     working_df %>%
+    #         filter(!is.na(basin)) %>%
+    #         group_by(basin) %>%
+    #         summarize(mgd = mean(dryDesignFlowMGD, na.rm = TRUE)) %>%
+    #         ggplot(
+    #             aes(x = reorder(basin, mgd), y = mgd)
+    #         ) +
+    #         geom_col(fill = "maroon") +
+    #         coord_flip() +
+    #         theme_bw() +
+    #         labs(
+    #             y = "Average Dry Design Flow (MGD)",
+    #             x = "Basin",
+    #             title = "Average Dry Design Flow, Grouped By Basin"
+    #         )
+    # })
+    # 
+    # point <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
+    # output$plot3 <- renderPlot({
+    #     cost %>%
+    #         group_by(type1) %>%
+    #         summarize(mean = mean(`Total Cost` / Population.x)) %>%
+    #         ggplot(aes(x = reorder(type1, mean),
+    #                    y = mean)) +
+    #         geom_col(fill = "forest green") +
+    #         annotate(geom = "text", x = 1, y = 2000, label = "n = 3") +
+    #         annotate(geom = "text", x = 2, y = 3000, label = "n = 1") +
+    #         annotate(geom = "text", x = 3, y = 4000, label = "n = 6") +
+    #         labs(x = "Type of WWTP",
+    #              y = "Average Cost / Population ($/person)") +
+    #         theme_bw() +
+    #         scale_y_continuous(labels = point)
+    # })
     
     # 3. Cap cost by year -----------------------------------------------------------------------------------------------
     final_cost_small$Year <- as.numeric(substr(final_cost_small$Year, start = 1, stop = 4))
     final_cost_small <- final_cost_small %>%
-        mutate(`Treatment Type` = basic_treatment)
+        mutate(`Treatment Type` = basic_treatment) %>%
+        mutate(tc_million = `Total Cost` / 1000000)
     
     p_3_react_df <- reactive({
         final_cost_small %>%
@@ -273,7 +288,7 @@ server <- function(input, output) {
         ggplot(p_3_react_df(),
                   aes(text = paste0("Entity: ", toTitleCase(tolower(Entity))),
                       x = Year,
-                      y = `Total Cost`,
+                      y = tc_million,
                       size = Population,
                       color = `Treatment Type`)) +
         geom_point(alpha = 0.75, position = "jitter") +
@@ -281,13 +296,12 @@ server <- function(input, output) {
         scale_y_continuous(labels = comma) +
         theme_bw() +
         theme(
-            legend.position = "bottom",
-            axis.text.y = element_text(angle = 90, vjust = 1, hjust=0)
+            legend.position = "bottom"
         ) +
         labs(color = "Treatment Type",
              title = "Total Cost of WWTP by Year, Sized by Population",
-             y = "Total Cost ($)",
-             x = "Year Built")
+             y = "Total Cost (Million Dollars)",
+             x = "Year Funded")
     })
     
     output$plot_3 <- renderPlotly(
@@ -295,7 +309,8 @@ server <- function(input, output) {
             layout(legend = list(orientation = "h",   
                                  xanchor = "center",  
                                  y = -0.1)) %>%
-            layout(autosize = F, width = 600, height = 600)
+            layout(autosize = F, width = 600, height = 600) %>%
+            config(displayModeBar = F)
     )
     
     # Stacked histogram (#5) --------------------------------------------------------------------------------------------
@@ -315,15 +330,16 @@ server <- function(input, output) {
             layout(legend = list(orientation = "h",   
                                  xanchor = "center",  
                                  y = -0.1)) %>%
-            layout(autosize = F, width = 600, height = 600)
+            layout(autosize = F, width = 600, height = 600) %>%
+            config(displayModeBar = F)
     })
     
     # Data --------------------------------------------------------------------------------------------------------------
-    output$cost_data <- renderDataTable({
-        datatable(
-            final_cost_small
-        )
-    })
+    # output$cost_data <- renderDataTable({
+    #     datatable(
+    #         final_cost_small
+    #     )
+    # })
     # Cost Map ----------------------------------------------------------------------------------------------------------
     costmap_react_final <- reactive({
         final_cost_small %>%
