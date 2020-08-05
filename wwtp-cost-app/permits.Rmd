@@ -4,6 +4,15 @@ output: html_document
 
 # Permits
 
-#### Centralized wastewater treatment permits come in two types, both administered by the Oregon Department of Environmental Quality (DEQ). The National Pollutant Discharge Elimination system (NPDES) permit is authorized by the Clean Water Act and the EPA, but administered by the state regulatory agencies. This permit is for facilities that treat wastewater, then discharge the treated water into surface waters. The EPA maintains a site describing details regarding NPDES permits at [their site.](https://www.epa.gov/npdes) The other type of permit, Water Pollution Control Facilities (WPCF),  is authorized and administered by the Oregon DEQ. This type of permit is required for facilities that discharge treated wastewater to land. The Oregon DEQ maintains an permit site at [this site.](https://www.oregon.gov/deq/wq/wqpermits/Pages/All-Permits-Applications.aspx) 
+## **Centralized Wastewater Treatment Permits** 
 
-#### Septic tanks are a common type of decentralized wastewater treatment system. These systems are also known as on-site systems. The treatment of the wastewater occurs on the physical site where the wastewater is generated. Generally a permit is required for the construction of these systems, which is often administered through the country where the site is located. The Oregon DEQ maitins a site describing onsite system management at [this page.](https://www.oregon.gov/deq/Residential/Pages/Onsite.aspx) 
+#### These permits come in two types, both administered by the Oregon Department of Environmental Quality (DEQ).  
+
+### NPDES Permits  
+> #### The National Pollutant Discharge Elimination system (NPDES) permit is authorized by the Clean Water Act and the EPA, but some states are approved to administer NPDES permits at the state level. Oregon is one of these states, and NPDES permits are issued by the Department of Environmental Quality (DEQ). This permit is for facilities that treat wastewater, then discharge the treated water into surface waters. The EPA maintains a site describing details regarding [NPDES permits](https://www.epa.gov/npdes).  
+
+### WPCF Permits  
+> #### The other type of permit, Water Pollution Control Facilities (WPCF), is authorized at the state level and is also administered by the Oregon DEQ. This type of permit is required for facilities that discharge treated wastewater to land only, whether that is through irrigation or biosolids application. The NPDES permit covers land application for facilities that discharge to surface waters. The Oregon DEQ has an [FAQ and other information including permit application forms](https://www.oregon.gov/deq/wq/wqpermits/Pages/All-Permits-Applications.aspx) for both types of permit.  
+
+## **Decentralized Wastewater Treatment Permits**
+#### Decentralized wastewater treatment systems are also known as on-site systems. The treatment of the wastewater occurs on the physical site where the wastewater is generated. Generally a permit is required for the construction of these systems, and is often administered through the county where the site is located. For more information on on-site systems, see the Oregon DEQ's [Onsite Wastewater Management Program](https://www.oregon.gov/deq/Residential/Pages/Onsite.aspx) website.  
