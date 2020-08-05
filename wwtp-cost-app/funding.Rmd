@@ -2,4 +2,31 @@
 output: html_document
 ---
 
-# Funding
+# Potential Funding Sources  
+#### These are some of the current main funding sources for small or rural wastewater treatment projects in Oregon. Descriptions are from the funding websites. For more information on any of these funding sources, click the title to view the website, including contact information.  
+## [Oregon Clean Water State Revolving Fund](https://www.oregon.gov/deq/wq/cwsrf/Pages/default.aspx)  
+* ####  Oregon Department of Environmental Quality, state/federal funding. The aximum loan amount is 15% of funds available in the given fiscal year. DEQ will award up to $500,000 in principal forgiveness per project, or 50 percent of the loan for a distressed community, or 50 percent of the eligible project costs for green/sustainability projects, whichever is less.  
+* ####  The Clean Water State Revolving Fund provides below-market rate loans for the planning, design and construction of water pollution control activities. Eligible public agencies include tribal nations, cities, counties, sanitary districts, soil and water conservation districts, irrigation districts, various special districts and certain intergovernmental entities. "Public agency” in this program is defined by ORS 468.423. If you are unsure whether your organization qualifies, contact DEQ.  
+
+## [Oregon Water/Wastewater Financing Program](http://www.orinfrastructure.org/Infrastructure-Programs/WW/) 
+* ####  IFA, state. Maximum loan combination $10 million per project. Maximum grant award $750,000.   
+* ####  This loan program funds the design and construction of public infrastructure needed to ensure compliance with the Safe Drinking Water Act or the Clean Water Act. To be eligible for funding: The project must assist a community achieve or maintain compliance with the Clean Water Act or the Safe Drinking Water Act as documented by the appropriate regulatory agency. For planning/technical assistance funding requests, contact a Regional Development Officer to learn more about any documentation requirements that may apply. An applicant is not eligible for grant funds if the applicant's annual median household income is equal or greater than 100 percent of the state average median household income for the same year.  
+
+## [Oregon Community Development Block Grant Program](http://www.orinfrastructure.org/Infrastructure-Programs/CDBG/)   
+* #### Business Oregon (OIFA), state funding. Maximum grant for wastewater improvements $2,500,000.   
+* ####  Grants and technical assistance are available to develop livable urban communities for persons of low and moderate incomes by: expanding economic opportunities; and providing housing and suitable living environments. All projects must meet one of three national objectives:    
+  +	#### The proposed activities must benefit low- and moderate-income individuals.  
+  +	#### The activities must aid in the prevention or elimination of slums or blight.  
+  +	#### There must be an urgent need that poses a serious and immediate threat to the health or welfare of the community.  
+
+## [Oregon Water & Waste Disposal Loan & Grant Program](https://www.rd.usda.gov/programs-services/water-waste-disposal-loan-grant-program/or)    
+* #### USDA, federal funding.     
+* #### This program provides funding for clean and reliable drinking water systems, sanitary sewage disposal, sanitary solid waste disposal, and storm water drainage to households and businesses in eligible rural areas (<10,000 people). Funds may be used for construction and upgrades of collection systems, and treatment facilities, as well as drinking water and storm water projects.  
+
+## [Oregon Community Facilities Direct Loan & Grant Program]()    
+* #### USDA, federal funding.   
+* #### This program provides affordable funding to develop essential community facilities in rural areas. An essential community facility is defined as a facility that provides an essential service to the local community for the orderly development of the community in a primarily rural area, and does not include private, commercial or business undertakings. Rural areas including cities, villages, townships and towns including Federally Recognized Tribal Lands with no more than 20,000 residents according to the latest U.S. Census Data are eligible for this program.  
+
+## [RCAC Loans]() 
+* #### Rural Community Assistance Corporation (RCAC), nonprofit.  
+* #### 
