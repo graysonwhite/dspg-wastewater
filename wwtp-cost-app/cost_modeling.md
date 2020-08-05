@@ -54,7 +54,7 @@ bayes_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  695ms 
+## Fit time:  632ms 
 ## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps
@@ -113,7 +113,7 @@ freq_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  25ms 
+## Fit time:  23ms 
 ## 
 ## Call:
 ## stats::lm(formula = log(`Total Cost`) ~ log(Population) + basic_treatment + 

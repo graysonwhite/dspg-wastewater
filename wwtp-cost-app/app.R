@@ -373,9 +373,24 @@ server <- function(input, output) {
     
     # Stacked histogram (#5) --------------------------------------------------------------------------------------------
     hist_df <- reactive({
-        final_cost_small %>%
-            filter(basic_treatment %in% input$tech_hist)
+        working_df %>%
+            mutate(`Treatment Type` = case_when(
+                type1 %in% c("lagoons", "pre-aerated lagoons") ~ "Lagoons",
+                type1 %in% c("trickling filter", "trickling filter - high rate",
+                             "trickling filter - low rate") ~ "trickling filter",
+                type1 %in% c("activated sludge") ~ "Activated Sludge",
+                type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+                             "STEP system", "oxidation ditch", "biological contactors"
+                ) ~ "Other")
+            ) %>%
+            filter(`Treatment Type` %in% input$tech_hist) %>%
+            filter(Population <= 20000)
     })
+    
+    # hist_df <- reactive({
+    #     final_cost_small %>%
+    #         filter(basic_treatment %in% input$tech_hist)
+    # })
     
     p_5 <- reactive({
         ggplot(hist_df(),
