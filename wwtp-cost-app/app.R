@@ -163,8 +163,19 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
-            tabPanel("Centralized vs. decentralized"),
-            tabPanel("Centralized technologies"),
+            tabPanel("Centralized vs. decentralized",
+                     mainPanel(
+                         fluidPage(
+                             includeMarkdown('central_vs_decentral.Rmd')
+                         )
+                     )
+                     ),
+            tabPanel("Centralized technologies",
+                     mainPanel(
+                         fluidPage(
+                             includeMarkdown('central.Rmd')
+                         )
+                     )),
             tabPanel(
                 "Collection",
                 mainPanel(

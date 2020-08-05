@@ -23,31 +23,3 @@ output: html_document
 
 #### **Tertiary Treatment**  
 >  Tertiary treatment is needed when 
-
-### Centralized System Treatment Technologies   
-####	**Clarifiers**  
->   
-
-####	**Aeration**  
->	Aeration is necessary for many treatment technologies that use microorganisms to decompose organic matter in wastewater. In order to decompose organic matter, the microorganisms need oxygen. To determine how much oxygen it would take to decompose all the organic matter in wastewater, we measure biochemical oxygen demand, or BOD5, which is one of the main components of NPDES permits. Biochemical oxygen demand is one of the main reasons we don't put wastewater straight into surface waters, because the decomposition would use up all the oxygen available in the water.  
-
-####	**Lagoons or Stabilization Ponds**  
->	Lagoons are a type of secondary treatment, with a carefully constructed and controlled environment. They can be constructed with and without aeration, and used either alone or combined with other secondary treatments. Lagoons can also be used as storage to provide for releases on a seasonal basis.  
-
-####	**Activated Sludge**  
-> This is a type of secondary treatment which helps convert colloidal and dissolved solids, which do not easily settle out, to solids that can be settled out in a clarifier. In activated sludge treatment, aeration is used to help provide dissolved oxygen so that microorganisms can process the dissolved organic matter. The organic matter adsorbs, or sticks to, the microorganisms in the water, and then they release enzymes to break down the organic matter and absorb it into their body. A clarifier comes after the aeration so that the clumped together microorganisms, called flocs, can settle out in the clarifier as sludge. This is an important step because the sludge then get fed back into the aeration chamber rather than going out with the wastewater. Excess sludge is wasted, or removed, frequently to ensure that the population of microorganisms does not get too high.  
-
-####	**Oxidation Ditch**  
->	An oxidation ditch is a type of extended aeration where aerators are used in a large ditch to aerate and mix the wastewater. The mixing creates a circulation cell so that suspended solids do not settle out.  
-
-####	**STEP system**  
-
-
-####  **Sequencing Batch Reactor**  
-
-
-####	**Trickling Filter**  
->	In this type of secondary treatment, wastewater is sprayed over a bed of crushed rock, where microorganisms digest the organic matter in the water. The crushed rock allows for a larger surface area for the microorganisms to live on, as well as enough oxygen for them to use in the decomposition process. The microorgnisms form what is known as a slime on the surface of the crushed rock, which occasionally sloughs off and is removed by settling in a final clarifier. Wastewater may be sent through the trickling filter multiple times, which is known as recirculation, to help dilute and further treat the wastewater.  
-
-####	**Rotating Biological Contactor (secondary)**  
->	A rotating biological contactor is a secondary treatment which consists of a series of plastic discs that sit partway in the water. Microorganisms live on the discs, which rotate in and out of the water to provide sufficient oxygen for decomposition. As with a trickling filter, a slime layer forms on the discs, occasionally sloughs off, and settles out in a clarifier.  
