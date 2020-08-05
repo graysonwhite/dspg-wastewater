@@ -1,0 +1,17 @@
+---
+title: 'Water Quality'
+output: html_document
+---
+
+## What is water quality and why is it important?
+
+
+## Why do we treat our wastewater?
+
+
+## Why are permits required for wastewater treatment?
+
+
+## Permit Requirements
+* **Five-Day Biochemical Oxygen Demand (BOD5)**  
+	Biochemical oxygen demand is measured to determine how much dissolved oxygen is required to decompose organic waste. This is one of the main causes of eutrophication.
