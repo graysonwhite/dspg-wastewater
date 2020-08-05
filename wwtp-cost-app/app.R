@@ -95,6 +95,10 @@ ui <- navbarPage(
                          checkboxGroupInput("cost_type", label = "Technology Type",
                                             choices = list("Lagoons", "Activated Sludge", "Other"),
                                             selected = list("Lagoons", "Activated Sludge", "Other")),
+                         sliderInput("pop_cost_map", label = "Population",
+                                     min = 0,
+                                     max = 10000,
+                                     value = 10000),
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
@@ -119,7 +123,6 @@ ui <- navbarPage(
                      )
                      ),
             tabPanel("Stacked Histogram",
-                     setBackgroundColor("white"),
                      sidebarPanel(
                          checkboxGroupInput("tech_hist", label = "Technology Type",
                                             choices = list("Lagoons", "Activated Sludge", "Other"),
@@ -128,6 +131,17 @@ ui <- navbarPage(
                      ),
                      mainPanel(
                          plotlyOutput("stacked_hist")
+                     )
+                     ),
+            tabPanel("Technology Prevalence",
+                     sidebarPanel(
+                         checkboxGroupInput("barchart_tech", label = "Technologies to Include",
+                                            choices = unique(working_df$type1),
+                                            selected = unique(working_df$type1)),
+                         submitButton("Regenerate Plot")
+                     ),
+                     mainPanel(
+                         plotlyOutput("barchart")
                      )
                      )
             # tabPanel("Misc. Data Visualizations",
@@ -395,7 +409,8 @@ server <- function(input, output) {
     costmap_react_final <- reactive({
         final_cost_small %>%
             dplyr::filter(`Total Cost` <= input$totalcost) %>%
-            dplyr::filter(basic_treatment %in% input$cost_type)
+            dplyr::filter(basic_treatment %in% input$cost_type) %>%
+            filter(Population <= input$pop_cost_map)
     })
     
     pal <- colorFactor(c("red", "green", "blue"), unique(final_cost_small$basic_treatment))
@@ -416,6 +431,35 @@ server <- function(input, output) {
                                  "Construction Cost: ", dollar(costmap_react_final()$`Construction Cost`), "</br>"
                                  ),
                              radius = 4) 
+    })
+    
+    # Technology Prevalence ---------------------------------------------------------------------------------------------
+    reactive_barplot <- reactive({
+        working_df %>%
+            mutate(`Technology Type` = type1) %>%
+            filter(`Technology Type` %in% input$barchart_tech)
+    })
+    
+    bar_plot <- reactive({
+        reactive_barplot() %>%
+        ggplot(aes(fill = `Technology Type`,
+                   x = 1)) +
+        geom_bar() +
+        coord_flip() +
+        theme_void() +
+        theme(
+            legend.position = "bottom"
+        ) +
+        scale_fill_viridis_d(na.value = "grey50")
+    })
+    
+    output$barchart <- renderPlotly({
+        ggplotly(bar_plot(), tooltip = c("fill", "count")) %>%
+            layout(legend = list(orientation = "h",   
+                                 xanchor = "center",  
+                                 y = -0.1)) %>%
+            layout(autosize = F, width = 600, height = 600) %>%
+            config(displayModeBar = F)
     })
     
 # Education
