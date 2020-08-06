@@ -106,7 +106,7 @@ ui <- navbarPage(
                          includeMarkdown("costmap_text.Rmd")
                      )
             ),
-            tabPanel("Capital cost by year",
+            tabPanel("Capital Cost by Year",
                      sidebarPanel(
                          sliderInput("pop_3", label = "Population",
                                      min = 0,
@@ -143,7 +143,18 @@ ui <- navbarPage(
                      mainPanel(
                          plotlyOutput("barchart")
                      )
+                     ),
+            tabPanel("Design Capacity by Technology Type",
+                     sidebarPanel(
+                         checkboxGroupInput("violin_tech", label = "Technologies to Include",
+                                            choices = c("Lagoons", "Trickling Filter", "Activated Sludge"),
+                                            selected = c("Lagoons", "Trickling Filter", "Activated Sludge")),
+                         submitButton("Regenerate Plot")
+                     ),
+                     mainPanel(
+                         plotOutput("violin", width = 600, height = 600)
                      )
+            )
         )
         ),
     tabPanel(
@@ -395,6 +406,45 @@ server <- function(input, output) {
             layout(autosize = F, width = 600, height = 600) %>%
             config(displayModeBar = F)
     })
+    
+    # Violin plot -------------------------------------------------------------------------------------------------------
+    violin_df <- reactive({
+        working_df %>%
+            mutate(
+                type_plot = case_when(
+                    type1 %in% c("lagoons", "pre-aerated lagoons") ~ "Lagoons",
+                    type1 %in% c("trickling filter", "trickling filter - high rate",
+                                 "trickling filter - low rate") ~ "Trickling Filter",
+                    type1 %in% c("activated sludge") ~ "Activated Sludge",
+                    type1 %in% c("extended aeration", "membrane bioreactor", "recirculating gravel filter", NA,
+                                 "STEP system", "oxidation ditch", "biological contactors") ~ "other/NA")) %>%
+            filter(type_plot %in% c("Lagoons", "Trickling Filter", "Activated Sludge")) %>%
+            filter(type_plot %in% input$violin_tech)
+    })
+    
+    output$violin <- renderPlot({
+        violin_df() %>%
+            ggplot(aes(y = type_plot,
+                       x = dryDesignFlowMGD,
+                       color = type_plot,
+                       fill = type_plot)) +
+            scale_color_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+            scale_fill_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
+            geom_violin(
+                alpha = 0.4) +
+            geom_point() +
+            theme_bw() +
+            labs(
+                x = "Dry Design Flow (MGD)",
+                y = "Technology",
+                title = "Flow of WWTPs, Grouped by Technology"
+            ) +
+            theme(
+                legend.position = "none"
+            ) +
+            xlim(0,1)
+    })
+
     
 # Education
 # Funding Resources
