@@ -52,7 +52,7 @@ bayes_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  837ms 
+## Fit time:  838ms 
 ## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps
@@ -91,7 +91,7 @@ ggplot(log_pop_dist_df,
   xlim(-2,2)
 ```
 
-![plot of chunk unnamed-chunk-30](figure/unnamed-chunk-30-1.png)
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 
 
 ```r
@@ -111,7 +111,7 @@ freq_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  26ms 
+## Fit time:  23ms 
 ## 
 ## Call:
 ## stats::lm(formula = log(`Total Cost`) ~ log(Population) + basic_treatment + 
