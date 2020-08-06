@@ -1,7 +1,5 @@
 ---
-title: "Bayesian Cost Modeling"
-author: "Grayson White"
-date: "7/29/2020"
+title: "Cost Modeling for WWTPs in Oregon"
 output: html_document
 ---
 
