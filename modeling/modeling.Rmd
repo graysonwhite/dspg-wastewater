@@ -1,0 +1,47 @@
+---
+title: "modeling"
+author: "Grayson White"
+date: "8/6/2020"
+output: html_document
+---
+
+```{r output = FALSE, warning = FALSE, message = FALSE}
+# Load packages
+library(tidyverse)
+library(tidymodels)
+library(glmulti)
+```
+
+```{r output = FALSE, warning = FALSE, message = FALSE}
+# Load data
+dat <- read_csv("../final_cost_small.csv")
+
+dat <- dat %>%
+    mutate(
+    has_pumps = case_when(
+      Collection %in% c("Conventional Gravity, Effluent Pumps",
+                        "Effluent Pumps", "Effluent Pumps, Conventional Gravity",
+                        "Conventional Gravity, Effluent Pumps, Small Diameter Gravity") ~ TRUE,
+      Collection %in% c("Conventional Gravity", "-") ~ FALSE
+    )
+    ) %>%
+  select(-X1, -X1_1) %>%
+  mutate(
+    pop_density = Population / sq_mi
+  )
+```
+
+This document will preform both frequentist and bayesian methods, comparing the outcomes of the two. We will also use both standard functions such as `lm()` from the built-in `stats` package, and we will also perform our analyses with `tidymodels` packages.
+
+# Frequentist, `stats` package
+```{r}
+m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density + coastal,
+         data = dat)
+summary(m1)
+
+m2 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density + coastal,
+         data = dat)
+summary(m2)
+```
+
+
