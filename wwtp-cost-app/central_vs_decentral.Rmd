@@ -4,12 +4,19 @@ output: html_document
 
 ## **Decentralized Wastewater Treatment**  
 
+#### Decentralized wastewater treatment is also known as on-site treatment, and is typically consists of a septic system and drainfield, or soil treatment system. Since these are on-site treatment systems, the cost of installation and maintenance is typically the responsibility of the home or business owner. 
+
+#### **Treatment Process**  
+> Wastewater first flows into the septic tank, and it rests there so that the solids can settle out. The water then flows out to the drainfield, where soil microbes treat the waste. Site selection is very important for decentralized systems 
+
+#### **Maintenance**  
+> It is important for septic systems to be properly maintained, otherwise they could fail which might result in wastewater backing up into the house or pooling on the ground above the drain field. Typical maintenance includes regular inspection and pumping. A well maintained septic system can last over 40 years, but a poorly maintained system may need to be replaced in just a few. Replacement can cost in the range of $3,000 to $7,000.
 
 ## **Centralized Wastewater Treatment**  
 
 ### Treatment Process    
 
-#### **Preliminary treatment**  
+#### **Preliminary Treatment**  
 >	Preliminary treatment protects equipment by removing larger items that cannot decompose and could clog or damage the treatment equipment. Types of preliminary treatment include bar screens that remove larger debris, comminutors that grind up larger debris, grit chambers that slow down flow to allow inorganic solids to settle out of the water, and pre-aeration to help remove grease and oil as well as increase dissolved oxygen.  
 
 #### **Primary Treatment**  
@@ -22,7 +29,15 @@ output: html_document
 >	Disinfection is used to kill potentially harmful pathogens in the water. Common types of disinfection include chorination and ultraviolet light.  
 
 #### **Tertiary Treatment**  
->  Tertiary treatment is needed when 
+> Tertiary treatment is needed when treatment is needed beyond removal of biochemical oxygen demand, total suspended solids, and fecal coliform. This might be to remove excess nutrients such as Phosphorus and Nitrogen, or to remove metals such as mercury or silver, especially if the system serves business or industrial users.
+
+### Land Application
+
+#### **Irrigation**
+> 
+
+#### **Biosolids Application**
+> 
 
 ## **Centralized versus Decentralized Treatment**
 ####

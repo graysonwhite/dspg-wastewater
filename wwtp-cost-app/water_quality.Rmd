@@ -15,3 +15,5 @@ output: html_document
 ## Permit Requirements
 * **Five-Day Biochemical Oxygen Demand (BOD5)**  
 	Biochemical oxygen demand is measured to determine how much dissolved oxygen is required to decompose organic waste. This is one of the main causes of eutrophication.
+* **Total Suspended Solids (TSS)**  
+  Total suspended solids 
