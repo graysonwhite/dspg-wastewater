@@ -13,35 +13,48 @@ library(tidyverse)
 library(tidymodels)
 ```
 
-```{r include = FALSE}
+```{r output = FALSE, warning = FALSE, message = FALSE}
 # Load data
-usda_cost <- read_csv("final_cost_small.csv")
+dat <- read_csv("final_cost_small.csv")
 
-usda_cost <- usda_cost %>%
-  mutate(
+dat <- dat %>%
+    mutate(
     has_pumps = case_when(
       Collection %in% c("Conventional Gravity, Effluent Pumps",
                         "Effluent Pumps", "Effluent Pumps, Conventional Gravity",
                         "Conventional Gravity, Effluent Pumps, Small Diameter Gravity") ~ TRUE,
-      Collection %in% c("Conventional Gravity") ~ FALSE
+      Collection %in% c("Conventional Gravity", "-") ~ FALSE
     )
-    )
+    ) %>%
+  select(-X1, -X1_1) %>%
+  mutate(
+    pop_density = Population / sq_mi
+  )
 ```
 
 ```{r}
-# Make the model
+# lm
+m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density, data = dat)
+summary(m1)
+
+m2 <- lm(`Total Cost` ~ `Construction Cost`, data = dat)
+summary(m2)$r.squared
+
+m3 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + Region + pop_density, data = dat)
+summary(m3)
+
+m4 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density, data = dat)
+summary(m4)
+```
+
+```{r}
+# Bayesian Modeling with {tidymodels} and {rstan}
+
 ## Set seed
 set.seed(3737)
 
 ## Specify priors
-prior_dist <- rstanarm::student_t(df = 1, location = 0, scale = 2)
-
-## Split train/test
-wwtp_split <- usda_cost %>%
-  initial_split()
-
-wwtp_train <- training(wwtp_split)
-wwtp_test <- testing(wwtp_split)
+prior_dist <- rstanarm::student_t(df = 1, location = 0)
 
 ## Create model
 bayes_mod <-
@@ -51,21 +64,20 @@ bayes_mod <-
              prior = prior_dist) %>%
   translate()
 
-## Train
+## Fit model to data
 bayes_fit <-
   bayes_mod %>%
-  fit(log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps,
-      data = wwtp_train)
+  fit(log(`Total Cost`) ~ log(Population) + basic_treatment + dryDesignFlowMGD + pop_density + Region,
+      data = dat)
 
+## Extract fit results
 # bayes_fit$fit
 # bayes_fit$fit$coefficients
 stan_fit <- bayes_fit$fit$stanfit
 # class(stan_fit)
 # stan_fit
 # stan_fit@sim$samples[[4]]$`beta[4]`
-
 bayes_fit
-
 
 ## Visualize dist for log(pop)
 log_pop_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[1]`,
@@ -81,27 +93,3 @@ ggplot(log_pop_dist_df,
   theme_bw() +
   xlim(-2,2)
 ```
-
-```{r}
-# Frequentist
-## create model
-freq_mod <- linear_reg() %>%
-  set_engine("lm")
-
-## train
-freq_fit <- 
-  freq_mod %>%
-  fit(log(`Total Cost`) ~ log(Population) + basic_treatment + has_pumps,
-      data = wwtp_train)
-freq_fit
-freq_fit$fit$coefficients
-
-tidy(freq_fit)
-```
-
-
-
-
-
-
-
