@@ -374,43 +374,12 @@ library(tidyverse)
 library(tidymodels)
 library(priceR)</code></pre>
 <pre class="r"><code># Load data
-dat &lt;- read_csv(&quot;../final_cost_small.csv&quot;)
-
-dat &lt;- dat %&gt;%
-    mutate(
-    has_pumps = case_when(
-      Collection %in% c(&quot;Conventional Gravity, Effluent Pumps&quot;,
-                        &quot;Effluent Pumps&quot;, &quot;Effluent Pumps, Conventional Gravity&quot;,
-                        &quot;Conventional Gravity, Effluent Pumps, Small Diameter Gravity&quot;) ~ TRUE,
-      Collection %in% c(&quot;Conventional Gravity&quot;, &quot;-&quot;) ~ FALSE
-    )
-    ) %&gt;%
-  select(-X1, -X1_1) %&gt;%
-  mutate(
-    pop_density = Population / sq_mi
-  )
-
-dat &lt;- dat %&gt;%
-  mutate(year_begin = as.numeric(substr(Year, 0, 4)))
-
-dat &lt;- dat %&gt;%
-  mutate(year_inflated_2019 = adjust_for_inflation(`Total Cost`, year_begin, &quot;US&quot;, to_date = 2019)) </code></pre>
-<pre><code>## Generating URL to request all 304 results
-## Retrieving inflation data for US 
-## Generating URL to request all 60 results</code></pre>
-<pre class="r"><code>dat$Region[8] &lt;- &quot;ER&quot;
-dat$Region[24] &lt;- &quot;WR&quot;
-dat$Region[9] &lt;- &quot;WR&quot;
-
-dat$pop_density[9] &lt;- 1451.9
-dat$pop_density[20] &lt;- 885.0
-dat$pop_density[24] &lt;- 924.11
-dat$Population[24] &lt;- 750
-dat$pop_density[28] &lt;- 890.5</code></pre>
+dat &lt;- read_csv(&quot;dat.csv&quot;)</code></pre>
 <p>This document will preform both frequentist and bayesian methods, comparing the outcomes of the two. We will also use both standard functions such as <code>lm()</code> from the built-in <code>stats</code> package, and we will also perform our analyses with <code>tidymodels</code> packages.</p>
 <div id="frequentist-stats-package" class="section level1">
 <h1>Frequentist, <code>stats</code> package</h1>
-<pre class="r"><code>m1 &lt;- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density,
+<pre class="r"><code># Model experimentation
+m1 &lt;- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density,
          data = dat)
 summary(m1)</code></pre>
 <pre><code>## 
@@ -464,12 +433,12 @@ summary(m2)</code></pre>
 ## Residual standard error: 0.7757 on 29 degrees of freedom
 ## Multiple R-squared:  0.4321, Adjusted R-squared:  0.3538 
 ## F-statistic: 5.517 on 4 and 29 DF,  p-value: 0.001986</code></pre>
-<pre class="r"><code>m2_inf &lt;- lm(log(year_inflated_2019) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
+<pre class="r"><code>m2_inf &lt;- lm(log(total_cost) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
          data = dat)
 summary(m2_inf)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = log(year_inflated_2019) ~ log(Population) + log(pop_density) + 
+## lm(formula = log(total_cost) ~ log(Population) + log(pop_density) + 
 ##     basic_treatment + has_pumps, data = dat)
 ## 
 ## Residuals:
@@ -546,13 +515,13 @@ summary(m4)</code></pre>
 ## Residual standard error: 0.5861 on 24 degrees of freedom
 ## Multiple R-squared:  0.4067, Adjusted R-squared:  0.2831 
 ## F-statistic: 3.291 on 5 and 24 DF,  p-value: 0.02104</code></pre>
-<pre class="r"><code>m5 &lt;- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density + basic_treatment + `Permit Type`,
+<pre class="r"><code>m5 &lt;- lm(log(total_cost) ~ log(Population) + Region + pop_density + basic_treatment + `Permit Type`,
          data = dat)
 summary(m5)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = log(year_inflated_2019) ~ log(Population) + Region + 
-##     pop_density + basic_treatment + `Permit Type`, data = dat)
+## lm(formula = log(total_cost) ~ log(Population) + Region + pop_density + 
+##     basic_treatment + `Permit Type`, data = dat)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
@@ -574,6 +543,33 @@ summary(m5)</code></pre>
 ## Residual standard error: 0.7528 on 26 degrees of freedom
 ## Multiple R-squared:  0.5256, Adjusted R-squared:  0.3979 
 ## F-statistic: 4.115 on 7 and 26 DF,  p-value: 0.003641</code></pre>
+<pre class="r"><code># Final model specification
+final_model &lt;- lm(log(total_cost) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
+         data = dat)
+summary(final_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(total_cost) ~ log(Population) + log(pop_density) + 
+##     basic_treatment + has_pumps, data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.69329 -0.31118 -0.03183  0.56378  1.02988 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)             14.2221     1.0207  13.934 4.06e-14 ***
+## log(Population)          0.5810     0.1702   3.413  0.00198 ** 
+## log(pop_density)        -0.4449     0.1391  -3.197  0.00343 ** 
+## basic_treatmentLagoons  -0.2987     0.2785  -1.072  0.29266    
+## basic_treatmentOther    -0.9226     0.4266  -2.163  0.03924 *  
+## has_pumpsTRUE            0.5376     0.2815   1.910  0.06644 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.7241 on 28 degrees of freedom
+## Multiple R-squared:  0.5273, Adjusted R-squared:  0.4429 
+## F-statistic: 6.247 on 5 and 28 DF,  p-value: 0.0005208</code></pre>
 </div>
 <div id="bayesian-tidymodels-and-rstan-packages" class="section level1">
 <h1>Bayesian, <code>tidymodels</code> and <code>rstan</code> packages</h1>
@@ -594,7 +590,7 @@ bayes_mod &lt;-
 ## Fit model to data
 bayes_fit &lt;-
   bayes_mod %&gt;%
-  fit(log(year_inflated_2019) ~ log(Population) + Region + log(pop_density),
+  fit(log(total_cost) ~ log(Population) + Region + log(pop_density),
       data = dat)
 
 ## Extract fit results
@@ -607,10 +603,10 @@ stan_fit &lt;- bayes_fit$fit$stanfit
 bayes_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  708ms 
+## Fit time:  587ms 
 ## stan_glm
 ##  family:       gaussian [identity]
-##  formula:      log(year_inflated_2019) ~ log(Population) + Region + log(pop_density)
+##  formula:      log(total_cost) ~ log(Population) + Region + log(pop_density)
 ##  observations: 34
 ##  predictors:   5
 ## ------
