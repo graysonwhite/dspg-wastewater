@@ -35,6 +35,16 @@ dat <- dat %>%
 
 dat <- dat %>%
   mutate(year_inflated_2019 = adjust_for_inflation(`Total Cost`, year_begin, "US", to_date = 2019)) 
+
+dat$Region[8] <- "ER"
+dat$Region[24] <- "WR"
+dat$Region[9] <- "WR"
+
+dat$pop_density[9] <- 1451.9
+dat$pop_density[20] <- 885.0
+dat$pop_density[24] <- 924.11
+dat$Population[24] <- 750
+dat$pop_density[28] <- 890.5
 ```
 
 This document will preform both frequentist and bayesian methods, comparing the outcomes of the two. We will also use both standard functions such as `lm()` from the built-in `stats` package, and we will also perform our analyses with `tidymodels` packages.
@@ -49,7 +59,7 @@ m2 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density,
          data = dat)
 summary(m2)
 
-m2_inf <- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density,
+m2_inf <- lm(log(year_inflated_2019) ~ log(Population) + Region + log(pop_density),
          data = dat)
 summary(m2_inf)
 
@@ -65,14 +75,55 @@ m4 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density + type1,
 summary(m4)
 
 
-m5 <- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density + basic_treatment,
+m5 <- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density + basic_treatment + `Permit Type`,
          data = dat)
 summary(m5)
 ```
 
 # Bayesian, `tidymodels` and `rstan` packages
 ```{r}
+## Set seed
+set.seed(3737)
 
+## Specify priors
+prior_dist <- rstanarm::normal(location = c(0.5, 0, 0, -0.5), scale = c(0.25, 1, 1, 0.5))
+
+## Create model
+bayes_mod <-
+  linear_reg() %>% 
+  set_engine("stan", 
+             prior_intercept = rstanarm::normal(), 
+             prior = prior_dist) %>%
+  translate()
+
+## Fit model to data
+bayes_fit <-
+  bayes_mod %>%
+  fit(log(year_inflated_2019) ~ log(Population) + Region + log(pop_density),
+      data = dat)
+
+## Extract fit results
+# bayes_fit$fit
+# bayes_fit$fit$coefficients
+stan_fit <- bayes_fit$fit$stanfit
+# class(stan_fit)
+# stan_fit
+# stan_fit@sim$samples[[4]]$`beta[4]`
+bayes_fit
+
+## Visualize dist for log(pop)
+log_pop_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[1]`,
+                                          stan_fit@sim$samples[[2]]$`beta[1]`,
+                                          stan_fit@sim$samples[[3]]$`beta[1]`,
+                                          stan_fit@sim$samples[[4]]$`beta[1]`))
+ggplot(log_pop_dist_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = 0.5, sd = 0.25)) +
+  stat_function(fun = dnorm, args = list(mean = 0.5, sd = 0.25), geom = "area", aes(fill = "Prior"), alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2)
 ```
 
 
