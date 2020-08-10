@@ -59,7 +59,7 @@ m2 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density,
          data = dat)
 summary(m2)
 
-m2_inf <- lm(log(year_inflated_2019) ~ log(Population) + Region + log(pop_density),
+m2_inf <- lm(log(year_inflated_2019) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
          data = dat)
 summary(m2_inf)
 

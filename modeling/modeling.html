@@ -464,31 +464,32 @@ summary(m2)</code></pre>
 ## Residual standard error: 0.7757 on 29 degrees of freedom
 ## Multiple R-squared:  0.4321, Adjusted R-squared:  0.3538 
 ## F-statistic: 5.517 on 4 and 29 DF,  p-value: 0.001986</code></pre>
-<pre class="r"><code>m2_inf &lt;- lm(log(year_inflated_2019) ~ log(Population) + Region + log(pop_density),
+<pre class="r"><code>m2_inf &lt;- lm(log(year_inflated_2019) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
          data = dat)
 summary(m2_inf)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = log(year_inflated_2019) ~ log(Population) + Region + 
-##     log(pop_density), data = dat)
+## lm(formula = log(year_inflated_2019) ~ log(Population) + log(pop_density) + 
+##     basic_treatment + has_pumps, data = dat)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -2.03893 -0.40319  0.04346  0.54263  1.03724 
+## -1.69329 -0.31118 -0.03183  0.56378  1.02988 
 ## 
 ## Coefficients:
-##                  Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       12.5334     1.1112  11.279 4.02e-12 ***
-## log(Population)    0.7147     0.1670   4.279 0.000187 ***
-## RegionNWR          0.7441     0.4058   1.834 0.077007 .  
-## RegionWR           0.4979     0.2889   1.724 0.095438 .  
-## log(pop_density)  -0.3591     0.1443  -2.489 0.018806 *  
+##                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)             14.2221     1.0207  13.934 4.06e-14 ***
+## log(Population)          0.5810     0.1702   3.413  0.00198 ** 
+## log(pop_density)        -0.4449     0.1391  -3.197  0.00343 ** 
+## basic_treatmentLagoons  -0.2987     0.2785  -1.072  0.29266    
+## basic_treatmentOther    -0.9226     0.4266  -2.163  0.03924 *  
+## has_pumpsTRUE            0.5376     0.2815   1.910  0.06644 .  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.7554 on 29 degrees of freedom
-## Multiple R-squared:  0.4671, Adjusted R-squared:  0.3936 
-## F-statistic: 6.356 on 4 and 29 DF,  p-value: 0.0008443</code></pre>
+## Residual standard error: 0.7241 on 28 degrees of freedom
+## Multiple R-squared:  0.5273, Adjusted R-squared:  0.4429 
+## F-statistic: 6.247 on 5 and 28 DF,  p-value: 0.0005208</code></pre>
 <pre class="r"><code>m3 &lt;- lm(log(`Total Cost`) ~ massLoadFlowMGD + Region + pop_density + coastal,
          data = dat)
 summary(m3)</code></pre>
@@ -606,7 +607,7 @@ stan_fit &lt;- bayes_fit$fit$stanfit
 bayes_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  649ms 
+## Fit time:  708ms 
 ## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      log(year_inflated_2019) ~ log(Population) + Region + log(pop_density)
