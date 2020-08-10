@@ -9,7 +9,7 @@ output: html_document
 # Load packages
 library(tidyverse)
 library(tidymodels)
-library(glmulti)
+library(priceR)
 ```
 
 ```{r output = FALSE, warning = FALSE, message = FALSE}
@@ -29,19 +29,51 @@ dat <- dat %>%
   mutate(
     pop_density = Population / sq_mi
   )
+
+dat <- dat %>%
+  mutate(year_begin = as.numeric(substr(Year, 0, 4)))
+
+dat <- dat %>%
+  mutate(year_inflated_2019 = adjust_for_inflation(`Total Cost`, year_begin, "US", to_date = 2019)) 
 ```
 
 This document will preform both frequentist and bayesian methods, comparing the outcomes of the two. We will also use both standard functions such as `lm()` from the built-in `stats` package, and we will also perform our analyses with `tidymodels` packages.
 
 # Frequentist, `stats` package
 ```{r}
-m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density + coastal,
+m1 <- lm(log(`Total Cost`) ~ dryDesignFlowMGD + log(Population) + basic_treatment + Region + pop_density,
          data = dat)
 summary(m1)
 
-m2 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density + coastal,
+m2 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density,
          data = dat)
 summary(m2)
+
+m2_inf <- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density,
+         data = dat)
+summary(m2_inf)
+
+m3 <- lm(log(`Total Cost`) ~ massLoadFlowMGD + Region + pop_density + coastal,
+         data = dat)
+summary(m3)
+
+dat_filtered <- dat %>%
+  filter(type1 %in% c("lagoons", "activated sludge"))
+
+m4 <- lm(log(`Total Cost`) ~ log(Population) + Region + pop_density + type1,
+         data = dat_filtered)
+summary(m4)
+
+
+m5 <- lm(log(year_inflated_2019) ~ log(Population) + Region + pop_density + basic_treatment,
+         data = dat)
+summary(m5)
 ```
+
+# Bayesian, `tidymodels` and `rstan` packages
+```{r}
+
+```
+
 
 
