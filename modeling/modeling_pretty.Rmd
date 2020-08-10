@@ -1,8 +1,11 @@
 ---
 title: "modeling"
 author: "Grayson White"
-date: "8/6/2020"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 ```{r output = FALSE, warning = FALSE, message = FALSE}
