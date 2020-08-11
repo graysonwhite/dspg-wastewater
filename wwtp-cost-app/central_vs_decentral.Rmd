@@ -26,7 +26,7 @@ output: html_document
 >	Secondary treatment is used when wastewater is not sufficiently treated to be safely discharged. Examples of secondary treatment include septic tank drain fields, sequencing batch reactors, lagoons, trickling filters, and rotating biological contactors.  
 
 #### **Disinfection**  
->	Disinfection is used to kill potentially harmful pathogens in the water. Common types of disinfection include chorination and ultraviolet light.  
+>	Disinfection is used to kill potentially harmful pathogens in the water. Common methods of disinfection include chorination and ultraviolet light.  
 
 #### **Tertiary Treatment**  
 > Tertiary treatment is needed when treatment is needed beyond removal of biochemical oxygen demand, total suspended solids, and fecal coliform. This might be to remove excess nutrients such as Phosphorus and Nitrogen, or to remove metals such as mercury or silver, especially if the system serves business or industrial users.

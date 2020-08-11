@@ -7,6 +7,9 @@ output: html_document
 ####	**Aeration**  
 >	Aeration is necessary for many treatment technologies that use microorganisms to decompose organic matter in wastewater. In order to decompose organic matter, the microorganisms need oxygen. To determine how much oxygen it would take to decompose all the organic matter in wastewater, we measure biochemical oxygen demand, or BOD5, which is one of the main components of NPDES permits. Biochemical oxygen demand is one of the main reasons we don't put wastewater straight into surface waters, because the decomposition would use up all the oxygen available in the water.  
 
+####	**Clarifiers**  
+>  
+
 ####	**Lagoons or Stabilization Ponds**  
 >	Lagoons are a type of secondary treatment, with a carefully constructed and controlled environment. They can be constructed with and without aeration, and used either alone or combined with other secondary treatments. Lagoons can also be used as storage to provide for releases on a seasonal basis.  
 
@@ -16,17 +19,14 @@ output: html_document
 ####	**Oxidation Ditch**  
 >	An oxidation ditch is a type of extended aeration where aerators are used in a large ditch to aerate and mix the wastewater. The mixing creates a circulation cell so that suspended solids do not settle out.  
 
+####  **Sequencing Batch Reactor**  
+
+
 ####	**Trickling Filter**  
 >	In this type of secondary treatment, wastewater is sprayed over a bed of crushed rock, where microorganisms digest the organic matter in the water. The crushed rock allows for a larger surface area for the microorganisms to live on, as well as enough oxygen for them to use in the decomposition process. The microorgnisms form what is known as a slime on the surface of the crushed rock, which occasionally sloughs off and is removed by settling in a final clarifier. Wastewater may be sent through the trickling filter multiple times, which is known as recirculation, to help dilute and further treat the wastewater.  
 
 ####	**Rotating Biological Contactor (secondary)**  
 >	A rotating biological contactor is a secondary treatment which consists of a series of plastic discs that sit partway in the water. Microorganisms live on the discs, which rotate in and out of the water to provide sufficient oxygen for decomposition. As with a trickling filter, a slime layer forms on the discs, occasionally sloughs off, and settles out in a clarifier. 
 
-####	**Clarifiers**  
->   
-
-
 ####	**STEP system**  
 
-
-####  **Sequencing Batch Reactor** 
