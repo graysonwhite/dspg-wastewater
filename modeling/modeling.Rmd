@@ -10,6 +10,7 @@ output: html_document
 library(tidyverse)
 library(tidymodels)
 library(priceR)
+library(patchwork)
 ```
 
 ```{r output = FALSE, warning = FALSE, message = FALSE}
@@ -61,22 +62,17 @@ summary(final_model)
 
 # Bayesian, `tidymodels` and `rstan` packages
 ```{r}
-## Set seed
+## Set seed for reproducibility :-)
 set.seed(3737)
 
-## Specify priors
-prior_dist <- c(
-  rstanarm::normal(location = c(0.5), scale = c(0.25)),
-  rstanarm::normal(location = c(-0.5), scale = c(0.5)),
-  rstanarm::normal(location = c(0), scale = c(1)),
-  rstanarm::normal(location = c(0), scale = c(1)),
-  rstanarm::normal(location = c(0), scale = c(1))
-  )
+## Specify priors for each explanatory variable
+prior_dist <- rstanarm::normal(location = c(0.5, -0.5, -0.5, 0, 1),
+                               scale = c(0.25, 0.5, 0.5, 1, 0.5))
 
 ## Create model
 bayes_mod <-
   linear_reg() %>% 
-  set_engine("stan", 
+  set_engine("stan", # This is the Bayesian engine
              prior_intercept = rstanarm::normal(), 
              prior = prior_dist) %>%
   translate()
@@ -87,29 +83,157 @@ bayes_fit <-
   fit(log(total_cost) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
       data = dat)
 
-## Extract fit results
-# bayes_fit$fit
-# bayes_fit$fit$coefficients
-stan_fit <- bayes_fit$fit$stanfit
-# class(stan_fit)
-# stan_fit
-# stan_fit@sim$samples[[4]]$`beta[4]`
 bayes_fit
+```
 
+```{r}
 ## Visualize dist for log(pop)
+stan_fit <- bayes_fit$fit$stanfit
+
 log_pop_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[1]`,
                                           stan_fit@sim$samples[[2]]$`beta[1]`,
                                           stan_fit@sim$samples[[3]]$`beta[1]`,
                                           stan_fit@sim$samples[[4]]$`beta[1]`))
-ggplot(log_pop_dist_df,
+population <- ggplot(log_pop_dist_df,
        aes(samples)) +
-  stat_function(fun = dnorm, args = list(mean = 0.5, sd = 0.25)) +
-  stat_function(fun = dnorm, args = list(mean = 0.5, sd = 0.25), geom = "area", aes(fill = "Prior"), alpha = 0.4) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[1],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[1])) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[1],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[1]),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
   scale_fill_manual(values = c("goldenrod", "steelblue")) +
   geom_density(aes(fill = "Posterior"), alpha = 0.4) +
   theme_bw() +
-  xlim(-2,2)
+  xlim(-2,2) +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "Population")
+
+log_pop_density_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[2]`,
+                                          stan_fit@sim$samples[[2]]$`beta[2]`,
+                                          stan_fit@sim$samples[[3]]$`beta[2]`,
+                                          stan_fit@sim$samples[[4]]$`beta[2]`))
+population_density <- ggplot(log_pop_density_dist_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[2],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[2])) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[2],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[2]),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2) +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "Population Density")
+
+lagoons_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[3]`,
+                                          stan_fit@sim$samples[[2]]$`beta[3]`,
+                                          stan_fit@sim$samples[[3]]$`beta[3]`,
+                                          stan_fit@sim$samples[[4]]$`beta[3]`))
+lagoons <- ggplot(lagoons_dist_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[3],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[3])) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[3],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[3]),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2) +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "Treatment Type: Lagoons")
+
+other_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[4]`,
+                                          stan_fit@sim$samples[[2]]$`beta[4]`,
+                                          stan_fit@sim$samples[[3]]$`beta[4]`,
+                                          stan_fit@sim$samples[[4]]$`beta[4]`))
+other <- ggplot(other_dist_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[4],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[4])) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[4],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[4]),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2) +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "Treatment Type: Other")
+
+haspumps_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[5]`,
+                                          stan_fit@sim$samples[[2]]$`beta[5]`,
+                                          stan_fit@sim$samples[[3]]$`beta[5]`,
+                                          stan_fit@sim$samples[[4]]$`beta[5]`))
+haspumps <- ggplot(haspumps_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[5],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[5])) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior$location[5],
+                                         sd = bayes_fit$fit$prior.info$prior$scale[5]),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-2,2) +
+    theme(
+    legend.position = "bottom"
+  ) +
+  labs(title = "Has Pumps")
+
+intercept_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`alpha[1]`,
+                                          stan_fit@sim$samples[[2]]$`alpha[1]`,
+                                          stan_fit@sim$samples[[3]]$`alpha[1]`,
+                                          stan_fit@sim$samples[[4]]$`alpha[1]`))
+intercept <- ggplot(intercept_df,
+       aes(samples)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior_intercept$location,
+                                         sd = bayes_fit$fit$prior.info$prior_intercept$scale)) +
+  stat_function(fun = dnorm, args = list(mean = bayes_fit$fit$prior.info$prior_intercept$location,
+                                         sd = bayes_fit$fit$prior.info$prior_intercept$scale),
+                geom = "area",
+                aes(fill = "Prior"),
+                alpha = 0.4) +
+  scale_fill_manual(values = c("goldenrod", "steelblue")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+  xlim(-6,18) +
+  labs(title = "Intercept") +
+  theme(
+    legend.position = "none"
+  )
+
+(population + population_density + lagoons) / (other + haspumps + intercept)
 ```
+
+
+```{r}
+# class(stan_fit)
+# stan_fit
+# stan_fit@sim$samples[[4]]$`beta[4]`
+# bayes_fit$fit
+# bayes_fit$fit$coefficients
+```
+
 
 
 
