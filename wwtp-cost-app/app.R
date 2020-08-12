@@ -160,6 +160,18 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
+            tabPanel("Water quality",
+                     mainPanel(
+                         fluidRow(
+                             column(12,
+                                    includeMarkdown('water_quality.Rmd')
+                                    ),
+                             column(12,
+                                    img(src='BOD5-totals.png', align = "center", height = '500px', width = '700px')
+                                    )
+                         )
+                     )
+            ),
             tabPanel("Centralized vs. decentralized",
                      mainPanel(
                          fluidPage(
@@ -176,16 +188,26 @@ ui <- navbarPage(
             tabPanel(
                 "Collection",
                 mainPanel(
-                    fluidPage(
-                        includeMarkdown('collection.Rmd')
+                    fluidRow(
+                        column(12,
+                               includeMarkdown('collection.Rmd')
+                               ),
+                        column(12,
+                               img(src='land-use.png', align = "center", height = '500px', width = '700px')
+                               )
                     )
                 )
             ),
             tabPanel(
                 "Permits",
                      mainPanel(
-                         fluidPage(
-                             includeMarkdown('permits.Rmd')
+                         fluidRow(
+                             column(12,
+                                    includeMarkdown('permits.Rmd')
+                                    ),
+                             column(12,
+                                    img(src='NPDES-perms.png', align = "center", height = '500px', width = '700px')
+                                    )
                          )
                      )
                      ),
@@ -202,7 +224,7 @@ ui <- navbarPage(
     tabPanel(
         "Statistical Cost Model",
         fluidPage(
-            withMathJax(includeMarkdown("cost_modeling.md"))
+            withMathJax(includeMarkdown("modeling.Rmd"))
         )
     )
     )
