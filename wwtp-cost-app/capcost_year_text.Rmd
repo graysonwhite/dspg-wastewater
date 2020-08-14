@@ -12,4 +12,4 @@ output: html_document
 <br>  
 <br>
 
-#### This plot shows the cost of small scale wastewater treatment plants over time. The points are sized by the population of the city/town the wastewater treatment plant is in.
+#### This plot shows the cost of small scale wastewater treatment plants over time. The points are sized by the population of the city/town the wastewater treatment plant is in. The data used in this plot is from the "Cost Data (From USDA)" subsection of the "Data" tab on this website. 

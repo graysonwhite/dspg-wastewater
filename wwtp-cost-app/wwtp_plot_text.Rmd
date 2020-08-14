@@ -2,4 +2,4 @@
 output: html_document
 ---
 
-#### This plot shows all the wastewater treatment plants in Oregon that have a dry design capacity of less than 1 MGD. For more information on an individual plant, you can click on a point on the map.
+#### This plot shows wastewater treatment plants in Oregon with NPDES permits that we have data on which have a dry design capacity of less than 1 MGD. For more information on an individual plant, you can click on a point on the map. The dataset used in this plot can be found in the "Data" section of this webpage, under the "NPDES Data" subsection. 

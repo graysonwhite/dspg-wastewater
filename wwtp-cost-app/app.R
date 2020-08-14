@@ -248,7 +248,36 @@ ui <- navbarPage(
         mainPanel(
             htmlOutput(outputId = "prediction")
         )
-    )
+    ),
+    tabPanel("Data",
+             tabsetPanel(
+                 tabPanel("Overview and Call for Data",
+                          mainPanel(
+                              fluidPage(
+                                  includeMarkdown('call_for_data.Rmd')
+                              )
+                          )
+                          ),
+                 tabPanel("NPDES Data",
+                          mainPanel(
+                              width = 12,
+                              dataTableOutput("npdes_data")
+                          )
+                          ),
+                 tabPanel("WPCF Permit Data",
+                          mainPanel(
+                              width = 12,
+                              dataTableOutput("wpcf_data")
+                          )
+                          ),
+                 tabPanel("Cost Data (from USDA)",
+                          mainPanel(
+                              width = 12,
+                              dataTableOutput("cost_data")
+                          )
+                          )
+             )
+             )
     )
 
 # Server ----------------------------------------------------------------------------------------------------------------
@@ -275,14 +304,15 @@ server <- function(input, output) {
         ggplot(cap_mgd_react_df(),
                              aes(x = `Dry Design Capacity`,
                                  y = `Total Cost (Million Dollars)`,
-                                 label1 = Population)) +
+                                 label1 = Population,
+                                 label2 = Entity)) +
         geom_point(color = "steelblue", size = 2) +
         theme_bw() +
         xlim(0,1) +
         ylim(0,30) +
-        labs(title = "Dry Design Flow (MGD) by Total Cost",
+        labs(title = "Design Capacity (MGD) by Total Cost",
              y = "Total Cost (Million Dollars)",
-             x = "Dry Design Flow (MGD)")
+             x = "Design Capacity (MGD)")
     })
     
     output$cap_mgd <- renderPlotly({
@@ -492,7 +522,7 @@ server <- function(input, output) {
     
 # Education
 # Funding Resources
-# Cost Estimator
+# Cost Estimator --------------------------------------------------------------------------------------------------------
     ## Set seed for reproducibility :-)
     set.seed(3737)
     
@@ -524,12 +554,51 @@ server <- function(input, output) {
     }) 
     
     prediction <- reactive({
-        exp(predict(bayes_fit, pred_bayes()))
+        exp(predict(bayes_fit, pred_bayes())) %>%
+            pull()
     })
     
-    output$prediction <- renderUI({
-        HTML(paste0("The predicted cost of your wastewater treatment plant is ", prediction()," dollars."))
+    interval_1 <- reactive({
+        exp(predict(bayes_fit, new_data = pred_bayes(), type = "pred_int", level = 0.9)[1]) %>%
+            pull()
     })
+    
+    interval_2 <- reactive({
+        exp(predict(bayes_fit, new_data = pred_bayes(), type = "pred_int", level = 0.9)[2]) %>%
+            pull()
+    })
+
+    output$prediction <- renderUI({
+        HTML(paste0("The predicted cost of your wastewater treatment plant is ", dollar(prediction()),".",
+                    " Our 90% prediction interval estimate for this wastewater treatment plant is "
+                    # dollar(interval_1()), # this code breaks things
+                    # " to ",               # do not run it currently
+                    # dollar(interval_2())  # everything goes really slowly and it throws the same warning over and over
+                    )
+             )
+    })
+
+# Data ------------------------------------------------------------------------------------------------------------------
+    output$npdes_data <- renderDataTable({
+        datatable(
+            working_df,
+            options = list(scrollX = TRUE)
+        )
+    })
+    
+    wpcf <- read_csv("WPCFperms.csv")
+    output$wpcf_data <- renderDataTable({
+        datatable(
+            wpcf
+        )
+    })
+    
+    output$cost_data <- renderDataTable({
+        datatable(
+            dat,
+            options = list(scrollX = TRUE)
+            )
+        })
 }
 
 # Runs the application --------------------------------------------------------------------------------------------------

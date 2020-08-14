@@ -10,4 +10,4 @@ output: html_document
 #### -Green points: lagoons      
 #### -Blue points: other technology
       
-#### This map shows all the wastewater treatment plants in Oregon that are less than 1 MGD that we have cost data for. For more information on an individual plant, you can click on a point on the map.
+#### This map shows all the wastewater treatment plants in Oregon that are less than 1 MGD that we have cost data for. For more information on an individual plant, you can click on a point on the map. The data used in this map is from the "Cost Data (From USDA)" subsection of the "Data" tab on this website. 
