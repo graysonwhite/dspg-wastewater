@@ -16,6 +16,7 @@ library(tools)
 library(LaCroixColoR)
 library(viridis)
 library(shinyWidgets)
+library(tidymodels)
 
 # Load data -------------------------------------------------------------------------------------------------------------
 final_cost_small <- read_csv("final_cost_small.csv")
@@ -223,8 +224,29 @@ ui <- navbarPage(
     ),
     tabPanel(
         "Statistical Cost Model",
-        fluidPage(
-            withMathJax(includeMarkdown("modeling.Rmd"))
+        sidebarPanel(
+            numericInput("pop", label = "Population of your town", value = 0),
+            numericInput("pop_density", label = "Population density (people/square mile) of your town", value = 0),
+            radioButtons("treatment_type", label = "Intended Treatment Type",
+                         choices = c(
+                             "Lagoons", "Activated Sludge", "Other"
+                         ),
+                         selected = c(
+                             "Lagoons"
+                         )
+                         ),
+            radioButtons("has_pumps", label = "This WWTP will have pump(s)",
+                         choices = c(
+                             TRUE, FALSE
+                         ),
+                         selected = c(
+                             TRUE
+                         )
+            ),
+            submitButton("Regenerate Estimate")
+        ),
+        mainPanel(
+            htmlOutput(outputId = "prediction")
         )
     )
     )
@@ -471,6 +493,43 @@ server <- function(input, output) {
 # Education
 # Funding Resources
 # Cost Estimator
+    ## Set seed for reproducibility :-)
+    set.seed(3737)
+    
+    ## Specify priors for each explanatory variable
+    prior_dist <- rstanarm::normal(location = c(0.5, -0.5, -0.5, 0, 1),
+                                   scale = c(0.25, 0.5, 0.5, 1, 0.5))
+    
+    ## Create model
+    bayes_mod <-
+        linear_reg() %>% 
+        set_engine("stan", # This is the Bayesian engine
+                   prior_intercept = rstanarm::normal(), 
+                   prior = prior_dist) %>%
+        translate()
+    
+    ## Fit model to data
+    dat <- read_csv("dat.csv")
+    bayes_fit <-
+        bayes_mod %>%
+        fit(log(total_cost) ~ log(Population) + log(pop_density) + basic_treatment + has_pumps,
+            data = dat)
+    
+    ## Predict based on user inputs
+    pred_bayes <- reactive({
+        data.frame(Population = input$pop,
+                   pop_density = input$pop_density,
+                   basic_treatment = input$treatment_type,
+                   has_pumps = as.logical(input$has_pumps)) 
+    }) 
+    
+    prediction <- reactive({
+        exp(predict(bayes_fit, pred_bayes()))
+    })
+    
+    output$prediction <- renderUI({
+        HTML(paste0("The predicted cost of your wastewater treatment plant is ", prediction()," dollars."))
+    })
 }
 
 # Runs the application --------------------------------------------------------------------------------------------------

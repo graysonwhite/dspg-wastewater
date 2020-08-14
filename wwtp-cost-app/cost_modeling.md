@@ -171,7 +171,7 @@ bayes_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  46.2s 
+## Fit time:  38.1s 
 ## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      log(`Total Cost`) ~ log(Population) + basic_treatment + dryDesignFlowMGD + 
