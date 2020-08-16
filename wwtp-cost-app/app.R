@@ -225,8 +225,8 @@ ui <- navbarPage(
     tabPanel(
         "Statistical Cost Model",
         sidebarPanel(
-            numericInput("pop", label = "Population of your town", value = 0),
-            numericInput("pop_density", label = "Population density (people/square mile) of your town", value = 0),
+            numericInput("pop", label = "Population of your town", value = 100),
+            numericInput("pop_density", label = "Population density (people/square mile) of your town", value = 100),
             radioButtons("treatment_type", label = "Intended Treatment Type",
                          choices = c(
                              "Lagoons", "Activated Sludge", "Other"
@@ -570,10 +570,10 @@ server <- function(input, output) {
 
     output$prediction <- renderUI({
         HTML(paste0("The predicted cost of your wastewater treatment plant is ", dollar(prediction()),".",
-                    " Our 90% prediction interval estimate for this wastewater treatment plant is "
-                    # dollar(interval_1()), # this code breaks things
-                    # " to ",               # do not run it currently
-                    # dollar(interval_2())  # everything goes really slowly and it throws the same warning over and over
+                    " Our 90% prediction interval estimate for this wastewater treatment plant is ",
+                    dollar(interval_1()), 
+                    " to ",               
+                    dollar(interval_2())  
                     )
              )
     })
