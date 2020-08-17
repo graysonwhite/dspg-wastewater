@@ -244,6 +244,7 @@ ui <- navbarPage(
             submitButton("Regenerate Estimate")
         ),
         mainPanel(
+            includeMarkdown("prediction-header.Rmd"),
             htmlOutput(outputId = "prediction"),
             includeMarkdown("about_the_model.Rmd")
         )
@@ -572,7 +573,9 @@ server <- function(input, output) {
                     " Our 90% prediction interval estimate for this wastewater treatment plant is ",
                     dollar(interval_1()), 
                     " to ",               
-                    dollar(interval_2())  
+                    dollar(interval_2()),
+                    ". To update this estimate, change the model parameters in the sidebar and press
+                    \"Regenerate Estimate.\""
                     )
              )
     })
