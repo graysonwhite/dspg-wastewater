@@ -34,8 +34,6 @@ working_df <- working_df %>%
                          "oxidation ditch", "biological contactors") ~ "Other"
         ))
 
-knitr::knit("cost_modeling.Rmd", quiet = TRUE)
-
 # UI --------------------------------------------------------------------------------------------------------------------
 ui <- navbarPage(
     theme = shinytheme("united"),
@@ -155,6 +153,21 @@ ui <- navbarPage(
                      mainPanel(
                          plotOutput("violin", width = 600, height = 600)
                      )
+            ),
+            tabPanel("Land Use Map",
+                     mainPanel(
+                         includeMarkdown("land-use.Rmd")
+                     )
+                     ),
+            tabPanel("Environmental Impact Map",
+                     mainPanel(
+                         includeMarkdown("enviro.Rmd")
+                     )
+            ),
+            tabPanel("NPDES Permits Map",
+                     mainPanel(
+                         includeMarkdown("npdes.Rmd")
+                     )
             )
         )
         ),
@@ -163,13 +176,8 @@ ui <- navbarPage(
         tabsetPanel(
             tabPanel("Water quality",
                      mainPanel(
-                         fluidRow(
-                             column(12,
-                                    includeMarkdown('water_quality.Rmd')
-                                    ),
-                             column(12,
-                                    img(src='BOD5-totals.png', align = "center", height = '500px', width = '700px')
-                                    )
+                         fluidPage(
+                             includeMarkdown('water_quality.Rmd')
                          )
                      )
             ),
@@ -189,26 +197,16 @@ ui <- navbarPage(
             tabPanel(
                 "Collection",
                 mainPanel(
-                    fluidRow(
-                        column(12,
-                               includeMarkdown('collection.Rmd')
-                               ),
-                        column(12,
-                               img(src='land-use.png', align = "center", height = '500px', width = '700px')
-                               )
+                    fluidPage(
+                        includeMarkdown('collection.Rmd')
                     )
                 )
             ),
             tabPanel(
                 "Permits",
                      mainPanel(
-                         fluidRow(
-                             column(12,
-                                    includeMarkdown('permits.Rmd')
-                                    ),
-                             column(12,
-                                    img(src='NPDES-perms.png', align = "center", height = '500px', width = '700px')
-                                    )
+                         fluidPage(
+                             includeMarkdown('permits.Rmd')
                          )
                      )
                      ),
@@ -246,7 +244,8 @@ ui <- navbarPage(
             submitButton("Regenerate Estimate")
         ),
         mainPanel(
-            htmlOutput(outputId = "prediction")
+            htmlOutput(outputId = "prediction"),
+            includeMarkdown("about_the_model.Rmd")
         )
     ),
     tabPanel("Data",
