@@ -9,7 +9,7 @@ The goal of this project is to provide rural communities with insights to the co
 
 ### `shiny` Web Application
 Our web-based application includes visualization and tools for understanding, planning, and cost modeling small, centralized, rural Oregon wastewater treatment facilities, and information on decentralized treatment. Intended audiences of this application include the interested public, sewer boards, councils, planners, and researchers. We have characterized *small scale* wastewater treatment plants, meaning that we only consider treatment plants with a dry design capacity of less than or equal to 1 MGD. The `shiny` web application can be found [here](https://graysonwhite.shinyapps.io/oregon-wwtps/).
-![](https://github.com/graysonwhite/dspg-wastewater/blob/master/shiny.png)
+![](https://github.com/graysonwhite/dspg-wastewater/blob/master/miscellaneous/shiny.png)
 
 ### Results & Analysis 
 We first characterized wastewater treatment plants in Oregon, and we have found some interesting results about their structure, location, and cost. Many of these results can be found on the [`shiny` web application](https://graysonwhite.shinyapps.io/oregon-wwtps/).
