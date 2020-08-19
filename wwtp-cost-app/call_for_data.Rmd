@@ -14,4 +14,4 @@ output: html_document
 #### This data set is 34 observations and includes wastewater treatment plants that either were created from 2004 to 2020 or had a major upgrade in that time period. These plants were at least partially funded by the USDA, and the USDA was the organization able to get us this data. This is the data we use in our cost model. This data set is very small, and we are hoping to attain more data on cost for wastewaster treatment plants in the future. If you have data on cost or anything else about a wastewater treatment plant in Oregon that is not included in these data sets, please fill out the form provided at the link under the Call for Data section below. 
 
 # Call for Data
-#### Ask for data here
+#### If you have information on the cost of a small scale (<1 MGD) wastewater treatment plant that we do not have, or if you have any information on a small scale (<1 MGD) wastewater treatment plant that we have missed on this website, please fill out this quick Google Form: [survey link](https://docs.google.com/forms/d/e/1FAIpQLSekFXEx34RBDB7lvAnZSPPYpcnfty1OU6HpikF7hKibVuuxyw/viewform?usp=sf_link). Thank you!
