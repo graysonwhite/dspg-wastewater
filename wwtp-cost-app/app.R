@@ -129,7 +129,8 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         plotlyOutput("stacked_hist")
+                         plotlyOutput("stacked_hist"),
+                         includeMarkdown("hist_text.Rmd")
                      )
                      ),
             tabPanel("Technology Prevalence",
@@ -399,12 +400,12 @@ server <- function(input, output) {
                 ) ~ "Other")
             ) %>%
             filter(`Treatment Type` %in% input$tech_hist) %>%
-            filter(Population <= 20000)
+            filter(pop_2018 <= 20000)
     })
     
     p_5 <- reactive({
         ggplot(hist_df(),
-                  aes(x = Population,
+                  aes(x = pop_2018,
                       fill = `Treatment Type`)) +
         geom_histogram(bins = 10) +
         scale_fill_viridis_d() +

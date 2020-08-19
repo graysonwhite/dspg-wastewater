@@ -5,13 +5,13 @@ output: html_document
 # Data Overview
 
 ## NPDES Data
-#### Info here
+#### This data set is 114 observations and was sourced from the Oregon DEQ. We also added many variables from a survey from the League of Oregon Cities and from the census.
 
 ## WPCF Data
-#### Info here
+#### This data set is 69 oberservations and was created by us using permit data from the internet. This dataset only contains basic information as the WPCF permits only include basic information on the wastewater treatment plant. 
 
 ## USDA Cost data
-#### Infor here
+#### This data set is 34 observations and includes wastewater treatment plants that either were created from 2004 to 2020 or had a major upgrade in that time period. These plants were at least partially funded by the USDA, and the USDA was the organization able to get us this data. This is the data we use in our cost model. This data set is very small, and we are hoping to attain more data on cost for wastewaster treatment plants in the future. If you have data on cost or anything else about a wastewater treatment plant in Oregon that is not included in these data sets, please fill out the form provided at the link under the Call for Data section below. 
 
 # Call for Data
 #### Ask for data here
