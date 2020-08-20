@@ -108,7 +108,9 @@ population <- ggplot(log_pop_dist_df,
     theme(
     legend.position = "none"
   ) +
-  labs(title = "Population")
+  labs(title = "Population",
+       y = "",
+       x = "Estimate")
 
 log_pop_density_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[2]`,
                                           stan_fit@sim$samples[[2]]$`beta[2]`,
@@ -130,7 +132,9 @@ population_density <- ggplot(log_pop_density_dist_df,
     theme(
     legend.position = "none"
   ) +
-  labs(title = "Population Density")
+  labs(title = "Population Density",
+       y = "",
+       x = "Estimate")
 
 lagoons_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[3]`,
                                           stan_fit@sim$samples[[2]]$`beta[3]`,
@@ -152,7 +156,9 @@ lagoons <- ggplot(lagoons_dist_df,
     theme(
     legend.position = "none"
   ) +
-  labs(title = "Treatment Type: Lagoons")
+  labs(title = "Treatment Type: Lagoons",
+       y = "",
+       x = "Estimate")
 
 other_dist_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[4]`,
                                           stan_fit@sim$samples[[2]]$`beta[4]`,
@@ -174,7 +180,9 @@ other <- ggplot(other_dist_df,
     theme(
     legend.position = "none"
   ) +
-  labs(title = "Treatment Type: Other")
+  labs(title = "Treatment Type: Other",
+       y = "",
+       x = "Estimate")
 
 haspumps_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`beta[5]`,
                                           stan_fit@sim$samples[[2]]$`beta[5]`,
@@ -196,7 +204,9 @@ haspumps <- ggplot(haspumps_df,
     theme(
     legend.position = "bottom"
   ) +
-  labs(title = "Has Pumps")
+  labs(title = "Collection Has Lift Stations",
+       y = "",
+       x = "Estimate")
 
 intercept_df <- data.frame(samples = c(stan_fit@sim$samples[[1]]$`alpha[1]`,
                                           stan_fit@sim$samples[[2]]$`alpha[1]`,
@@ -215,12 +225,15 @@ intercept <- ggplot(intercept_df,
   geom_density(aes(fill = "Posterior"), alpha = 0.4) +
   theme_bw() +
   xlim(-6,18) +
-  labs(title = "Intercept") +
+  labs(title = "Intercept",
+       y = "",
+       x = "Estimate") +
   theme(
     legend.position = "none"
   )
 
 (population + population_density + lagoons) / (other + haspumps + intercept)
+# ggsave("test.png", width = 10, height = 7)
 ```
 
 

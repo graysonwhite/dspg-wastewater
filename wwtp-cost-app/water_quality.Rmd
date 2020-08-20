@@ -5,12 +5,11 @@ output: html_document
 
 ## What is water quality and why is it important?
 
+#### Water quality refers to the conditions of the water in streams, rivers, and lakes, and also in the ocean. These are surface water bodies, as contrasted to groundwater, which is the water that is in between soil and sediment particles below the ground surface. Water quality often refers to specific characteristics that make the water suitable for drinking, recreation, and habitat for fish and other aquatic species. These characteristics can include pH, temperature, turbidity, biological oxygen demand (BOD), nutrient (phosphorus and nitrogen) concentration, and the concentration of other chemicals. All of these factors can impact the ability of water to serve populations as a drinking water source, for human recreation, or support a diverse ecosystem. 
 
 ## Why do we treat our wastewater?
 
-
-## Why are permits required for wastewater treatment?
-
+#### We treat our wastewater to minimize impacts on water quality. Our domestic wastewater contains solids, nutrients, human pathogens, oxygen demanding compounds (generally carbon compounds), and other trace specific contaminants like pharmaceuticals, nanoparticles, etc. Wastewater treatment facilities included processes that are designed to remove some of these constituents so they are not released into our surface waters or applied to our land.
 
 ## Permit Requirements
 * **Five-Day Biochemical Oxygen Demand (BOD5)**  

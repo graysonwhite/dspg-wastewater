@@ -10,7 +10,7 @@ The model that we use for this prediction is a Bayesian linear model. We used st
 
 We also used Bayesian techniques for more easily interpretable outputs of this model. While this model's prediction power is not particularly strong, we have very good estimates of the distributions of the parameters in these models. These insights allow for an understanding of how certain variables effect the total cost of your wastewater treatment plant. Below is a plot with the prior distributions used in this model that have now been updated to posterior distributions given the data we have. 
 
-<img src="www/prior-posterior.png", width = "100%">
+<img src="www/prior-post-updated.png", width = "100%">
 
 As you can see, we now have our posterior distributions in gold which represents our estimate and uncertainty of variables in the model. When interpreting these distributions, remember that they are with respect to the log of total cost rather than just the total cost, and that the estimates for population and population density are logged as well. These figures should help you understand the effect of certain variables on the total cost of your wastewater treatment plant, holding all of the other factors constant. 
 

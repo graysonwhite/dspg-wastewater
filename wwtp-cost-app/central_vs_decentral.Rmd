@@ -14,7 +14,8 @@ output: html_document
 
 ## **Centralized Wastewater Treatment**  
 
-### Treatment Process    
+### Treatment Process 
+> The most common decentralized system is the residential septic system. Wastewater flows from the home into the septic tank. In the tank anaerobic bacteria metabolize both the solid and the solubilize waste. Remaining digested solids settle in the bottom of the tank. The liquid overflows to the drainfield. The drain field consists of a series of perforated pipe surrounded by gravel and buried under the soil. The liquid containing soluble wastes flows out of the perforations into the gravel and soil where a rich mat of primarily aerobic soil microbes treat the waste. Site selection of the drainfield is very important because water needs to percolate through the soil, and the water table cannot be too high or it will submerge the drainfield.
 
 #### **Preliminary Treatment**  
 >	Preliminary treatment protects equipment by removing larger items that cannot decompose and could clog or damage the treatment equipment. Types of preliminary treatment include bar screens that remove larger debris, comminutors that grind up larger debris, grit chambers that slow down flow to allow inorganic solids to settle out of the water, and pre-aeration to help remove grease and oil as well as increase dissolved oxygen.  
