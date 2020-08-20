@@ -69,10 +69,11 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         plotlyOutput("cap_mgd")
+                         plotlyOutput("cap_mgd"),
+                         includeMarkdown("cost_capacity_text.Rmd")
                      )
                     ),
-            tabPanel("Wastewater Treatment Plants",
+            tabPanel("Treatment Plant Locations",
                      sidebarPanel(
                          sliderInput("capacityslider", label = "Dry Design Capacity (MGD)", min = 0, max = 1, value = 1),
                          checkboxGroupInput("wwtp_type", label = "Technology Type",
@@ -141,7 +142,8 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         plotlyOutput("barchart")
+                         plotlyOutput("barchart"),
+                         includeMarkdown("tech_text.Rmd")
                      )
                      ),
             tabPanel("Design Capacity by Technology Type",
@@ -152,7 +154,8 @@ ui <- navbarPage(
                          submitButton("Regenerate Plot")
                      ),
                      mainPanel(
-                         plotOutput("violin", width = 600, height = 600)
+                         plotOutput("violin", width = 600, height = 600),
+                         includeMarkdown("violin_text.Rmd")
                      )
             ),
             tabPanel("Land Use Map",
@@ -167,7 +170,8 @@ ui <- navbarPage(
             ),
             tabPanel("NPDES Permits Map",
                      mainPanel(
-                         includeMarkdown("npdes.Rmd")
+                         includeMarkdown("npdes.Rmd"),
+                         includeMarkdown("npdes_map_text.Rmd")
                      )
             )
         )
@@ -175,21 +179,21 @@ ui <- navbarPage(
     tabPanel(
         "Community Wastewater Treatment",
         tabsetPanel(
-            tabPanel("Water quality",
+            tabPanel("Water Quality",
                      mainPanel(
                          fluidPage(
                              includeMarkdown('water_quality.Rmd')
                          )
                      )
             ),
-            tabPanel("Centralized vs. decentralized",
+            tabPanel("Centralized vs. Decentralized",
                      mainPanel(
                          fluidPage(
                              includeMarkdown('central_vs_decentral.Rmd')
                          )
                      )
                      ),
-            tabPanel("Centralized technologies",
+            tabPanel("Centralized Technologies",
                      mainPanel(
                          fluidPage(
                              includeMarkdown('central.Rmd')
@@ -212,7 +216,7 @@ ui <- navbarPage(
                      )
                      ),
             tabPanel(
-                "Funding resources",
+                "Funding Resources",
                 mainPanel(
                     fluidPage(
                         includeMarkdown('funding.Rmd')
@@ -295,7 +299,8 @@ server <- function(input, output) {
     cap_mgd_react_df <- reactive({
         final_cost_small %>%
             mutate(`Total Cost (Million Dollars)` = `Total Cost`/1000000,
-                   `Dry Design Capacity` = dryDesignFlowMGD) %>%
+                   `Dry Design Capacity` = dryDesignFlowMGD,
+                   Entity = toTitleCase(tolower(str_replace_all(Entity, ", CITY OF", "")))) %>%
             filter(`Total Cost (Million Dollars)` <= input$costSlider) %>%
             filter(`Dry Design Capacity` <= input$mgdSlider) %>%
             filter(Population <= input$popSlider) %>%
@@ -311,7 +316,7 @@ server <- function(input, output) {
         theme_bw() +
         xlim(0,1) +
         ylim(0,30) +
-        labs(title = "Design Capacity (MGD) by Total Cost",
+        labs(title = "Total Cost by Design Capacity (MGD)",
              y = "Total Cost (Million Dollars)",
              x = "Design Capacity (MGD)")
     })
@@ -413,7 +418,9 @@ server <- function(input, output) {
         theme(
             legend.position = "bottom"
         ) +
-        labs(title = "Population Served by Treatment Type")
+        labs(title = "Population Served by Treatment Type",
+             x = "City Population in 2018",
+             y = "Number of Facilities")
     })
     
     output$stacked_hist <- renderPlotly({

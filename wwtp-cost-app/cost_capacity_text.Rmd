@@ -1,0 +1,12 @@
+---
+output: html_document
+---
+
+<br>    
+<br>  
+<br>  
+<br>   
+<br>  
+<br>
+
+#### The symbols represent the total cost of a plant, upgrade, or expansion of a facility in rural Oregon. Use the sliders and check boxes to the left of the plot to narrow the range of plotted data. You must select “Regenerate Plot” after making a selection. Hover over the symbol to display the details of the project.

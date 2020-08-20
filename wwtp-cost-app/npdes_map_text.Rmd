@@ -1,0 +1,5 @@
+---
+output: html_document
+---
+
+#### The symbols on the map are facilities that have an NPDES permit, which will include more than just wastewater treatment plants. Also, the symbols that do represent treatment plants are not limited to less than 1 MGD as is most of the data on this site.

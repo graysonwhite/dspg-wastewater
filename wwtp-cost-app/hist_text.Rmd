@@ -9,4 +9,4 @@ output: html_document
 <br>  
 <br>
 
-#### This plot shows the distribution of types of small scale wastewater treatment plants over population. The data used in this plot is from the "NPDES Data" subsection of the "Data" tab on this website. 
+#### This plot shows the distribution of types of facilities according to the population of the city they serve. The y-axis is the number of facilities at that population. The data used in this plot is from the “NPDES Data" subsection of the “Data” tab on this website.

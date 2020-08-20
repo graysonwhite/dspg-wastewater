@@ -1,0 +1,5 @@
+---
+output: html_document
+---
+
+#### The plot illustrates the type of treatment technology most commonly used over a range of dry design flow rates. Generally trickling filters and lagoons are utilized at low flow rates, while activated sludge treatment is applicable over the whole flow rate range.
