@@ -27,7 +27,7 @@ output: html_document
 
 * **Land Application**
 
-  + **Irrigation** - Wastewater is commonly used for irrigation. It must be treated before irrigation to remove harmful bacteria and other water quality issues, especially if it is to be used as irrigation for agricultural areas. 
+  + **Irrigation** - Treated wastewater is commonly used for irrigation. It must be treated before irrigation to remove harmful bacteria and other water quality issues, especially if it is to be used on agricultural areas. 
 
   + **Biosolids Application** - Biosolids must be removed from the clarifiers periodically to allow for continued treatment of wastewater. Some facilities have approved plans to land apply these biosolids as fertilizer. For facilities that discharge to surface waters, this is included in the NPDES permit. For those that do not discharge to surface waters, state administered WPCF permits can be obtained through the Oregon DEQ.
   
@@ -35,4 +35,4 @@ output: html_document
   + Sometimes, wastewater is injected into a porous geologic formation through a well instead of discharged to surface waters or land applied. If an appropriate geologic formation is available that will not interfere with groundwater, wastewater is treated and injected into wells drilled specifically for disposal of wastewater. 
 
 ## **Centralized versus Decentralized Treatment**
-####
+> Transition to centralized systems is driven by population density, cost, and environmental concerns. Once communities reach a critical population density, septic systems may start to cause environmental problems or there may be limited space for placing additional systems. At this point it becomes more practical and perhaps cost-effective to transition to centralized treatment. This eliminates space concerns, as collection will be more cost-effective the closer together buildings are spaced. It also reduces environmental impacts by implementing centralized treatment that requires a permit and must meet pollution discharge requirements. Regular maintenance ensures that wastewater is properly treated to permit standards, whereas individual septic systems may fail or be irregularly maintained.
