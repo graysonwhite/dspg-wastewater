@@ -2,8 +2,10 @@
 output: html_document
 ---
 
-# Potential Funding Sources  
+## **Potential Funding Sources**  
 #### These are some of the current main funding sources for small or rural wastewater treatment projects in Oregon. Descriptions come directly from the funding websites. For more information on any of these funding sources, click the title to view the website, including contact information.  
+
+> Business Oregon organizes a ['one-stop' meeting](https://www.orinfrastructure.org/assets/docs/IFA/One-Stop.pdf) for stakeholders interested in funding for [infrastructure projects](https://www.orinfrastructure.org/Infrastructure-Programs/) such as wastewater facilities. This meeting can assist planners and decision makers with the permitting process, as well as putting together funding packages that utilize state and federal funds that may be available to them. Contact [Business Oregon](mailto:business.oregon@oregon.gov) for additional information.
 
 ## [Oregon Clean Water State Revolving Fund](https://www.oregon.gov/deq/wq/cwsrf/Pages/default.aspx)  
 #### * Oregon Department of Environmental Quality, state/federal funding. The aximum loan amount is 15% of funds available in the given fiscal year. DEQ will award up to $500,000 in principal forgiveness per project, or 50 percent of the loan for a distressed community, or 50 percent of the eligible project costs for green/sustainability projects, whichever is less.   
