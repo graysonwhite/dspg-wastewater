@@ -160,12 +160,14 @@ ui <- navbarPage(
             ),
             tabPanel("Land Use Map",
                      mainPanel(
-                         includeMarkdown("land-use.Rmd")
+                         includeMarkdown("land-use.Rmd"),
+                         includeMarkdown("land_use_map_text.Rmd")
                      )
                      ),
             tabPanel("Environmental Impact Map",
                      mainPanel(
-                         includeMarkdown("enviro.Rmd")
+                         includeMarkdown("enviro.Rmd"),
+                         includeMarkdown("enviro_map_text.Rmd")
                      )
             ),
             tabPanel("NPDES Permits Map",
