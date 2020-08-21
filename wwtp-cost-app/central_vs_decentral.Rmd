@@ -4,41 +4,35 @@ output: html_document
 
 ## **Decentralized Wastewater Treatment**  
 
-#### Decentralized wastewater treatment is also known as on-site treatment, and is typically consists of a septic system and drainfield, or soil treatment system. Since these are on-site treatment systems, the cost of installation and maintenance is typically the responsibility of the home or business owner. 
+> Decentralized wastewater treatment is also known as on-site treatment, and typically consists of a septic system and drainfield, or soil treatment system. Since these are on-site treatment systems, the cost of installation and maintenance is typically the responsibility of the home or business owner. 
 
-#### **Treatment Process**  
-> Wastewater first flows into the septic tank, and it rests there so that the solids can settle out. The water then flows out to the drainfield, where soil microbes treat the waste. Site selection is very important for decentralized systems 
+  * **Treatment Process** - In a septic system, wastewater flows from the home into the septic tank. In the tank anaerobic bacteria metabolize both the organic matter in the wastewater. Digested solids settle to the bottom of the tank, and the remaining liquid overflows to the drainfield. The drain field consists of a series of perforated pipe surrounded by gravel and buried under the soil. The liquid containing soluble wastes flows out of the perforations into the gravel and soil, where a rich mat of primarily aerobic soil microbes further treat the waste. Site selection of the drainfield is very important because water needs to percolate through the soil, and the water table cannot be too high or it will submerge the drainfield and pollute the groundwater. 
 
-#### **Maintenance**  
-> It is important for septic systems to be properly maintained, otherwise they could fail which might result in wastewater backing up into the house or pooling on the ground above the drain field. Typical maintenance includes regular inspection and pumping. A well maintained septic system can last over 40 years, but a poorly maintained system may need to be replaced in just a few. Replacement can cost in the range of $3,000 to $7,000.
+  * **Maintenance** - It is important for septic systems to be properly maintained, otherwise they could fail which might result in wastewater backing up into the house or pooling on the ground above the drain field. Typical maintenance includes regular inspection and pumping. A well maintained septic system can last over 40 years, but a poorly maintained system may need to be replaced in just a few. Replacement can cost in the range of $3,000 to $7,000.
 
 ## **Centralized Wastewater Treatment**  
 
-### Treatment Process 
-> The most common decentralized system is the residential septic system. Wastewater flows from the home into the septic tank. In the tank anaerobic bacteria metabolize both the solid and the solubilize waste. Remaining digested solids settle in the bottom of the tank. The liquid overflows to the drainfield. The drain field consists of a series of perforated pipe surrounded by gravel and buried under the soil. The liquid containing soluble wastes flows out of the perforations into the gravel and soil where a rich mat of primarily aerobic soil microbes treat the waste. Site selection of the drainfield is very important because water needs to percolate through the soil, and the water table cannot be too high or it will submerge the drainfield.
+> With centralized wastewater treatment, wastewater is piped through a collection system to a centralized facility, which treats the water through a variety of different processes prior to dischare. Centralized facilities are maintained by a city, sewer district, or other organization, which collects a bill from users attached to the wastewater system.
 
-#### **Preliminary Treatment**  
->	Preliminary treatment protects equipment by removing larger items that cannot decompose and could clog or damage the treatment equipment. Types of preliminary treatment include bar screens that remove larger debris, comminutors that grind up larger debris, grit chambers that slow down flow to allow inorganic solids to settle out of the water, and pre-aeration to help remove grease and oil as well as increase dissolved oxygen.  
+* **Treatment Process** 
 
-#### **Primary Treatment**  
->	The goal of primary treatment is to slow down the wastewater and allow solids to settle out. This takes place in primary clarifiers and septic tanks.  
+  + **Preliminary Treatment** - Preliminary treatment protects equipment by removing larger items that cannot decompose and could clog or damage the treatment equipment. Types of preliminary treatment include bar screens that remove larger debris, comminutors that grind up larger debris, grit chambers that slow down flow to allow inorganic solids to settle out of the water, and pre-aeration to help remove grease and oil as well as increase dissolved oxygen.  
 
-#### **Secondary Treatment**  
->	Secondary treatment is used when wastewater is not sufficiently treated to be safely discharged. Examples of secondary treatment include septic tank drain fields, sequencing batch reactors, lagoons, trickling filters, and rotating biological contactors.  
+  + **Primary Treatment** - The goal of primary treatment is to slow down the wastewater and allow solids to settle out. This takes place in primary clarifiers and septic tanks. Digestion of organic matter by microorganisms is also part of this process.  
 
-#### **Disinfection**  
->	Disinfection is used to kill potentially harmful pathogens in the water. Common methods of disinfection include chorination and ultraviolet light.  
+  + **Secondary Treatment** - Secondary treatment is used when wastewater is not sufficiently treated to be safely discharged. Examples of secondary treatment include septic tank drain fields, sequencing batch reactors, lagoons, trickling filters, and rotating biological contactors.  
+  + **Disinfection** - Disinfection is used to kill potentially harmful pathogens in the water. Common methods of disinfection include chorination and ultraviolet light.  
 
-#### **Tertiary Treatment**  
-> Tertiary treatment is needed when treatment is needed beyond removal of biochemical oxygen demand, total suspended solids, and fecal coliform. This might be to remove excess nutrients such as Phosphorus and Nitrogen, or to remove metals such as mercury or silver, especially if the system serves business or industrial users.
+  + **Tertiary Treatment** - Tertiary treatment is used when treatment is needed beyond removal of biochemical oxygen demand, total suspended solids, and fecal coliform. This might be to remove excess nutrients such as Phosphorus and Nitrogen, to remove metals such as mercury or silver, or address other water quality issues, especially if the system serves business or industrial users.
 
-### Land Application
+* **Land Application**
 
-#### **Irrigation**
-> 
+  + **Irrigation** - Wastewater is commonly used for irrigation. It must be treated before irrigation to remove harmful bacteria and other water quality issues, especially if it is to be used as irrigation for agricultural areas. 
 
-#### **Biosolids Application**
-> 
+  + **Biosolids Application** - Biosolids must be removed from the clarifiers periodically to allow for continued treatment of wastewater. Some facilities have approved plans to land apply these biosolids as fertilizer. For facilites that discharge to surface waters, this is included in the NPDES permit. For those that do not discharge to surface waters, state administered WPCF permits can be obtained through the Oregon DEQ.
+  
+* **Well Injection**
+  + Sometimes, wastewater is injected into a porous geologic formation through a well instead of discharged to surface waters or land applied. If an appropriate geologic formation is available that will not interfere with groundwater, wastewater is treated and injected into wells drilled specifically for disposal of wastewater. 
 
 ## **Centralized versus Decentralized Treatment**
 ####

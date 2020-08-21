@@ -2,4 +2,6 @@
 output: html_document
 ---
 
-#### The symbols on the map are facilities that have an NPDES permit, which will include more than just wastewater treatment plants. Also, the symbols that do represent treatment plants are not limited to less than 1 MGD as is most of the data on this site.
+#### The points on this map are facilities in Oregon that have an NPDES permit to discharge to surface waters. This includes treatment plants with flows of greater than 1 million gallons per day, as well as non WWTP dischargers such as industrial or commercial facilities. It does not include point source dischargers that land apply wastewater, as NPDES permits only regulate surface water discharge. The shading on the graph gives an idea of how many dischargers are in each watershed, but does not include information about discharge quantity or quality.  
+
+#### Data for this map comes from the EPA NPDES facility dataset.

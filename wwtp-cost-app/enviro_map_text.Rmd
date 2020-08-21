@@ -1,0 +1,7 @@
+---
+output: html_document
+---
+
+#### This map shows permitted biochemical oxygen demand for wastewater facilities in Oregon that discharge to surface waters. It is important to note that this is the maximum permitted value allowed for each permit, not the total biochemical oxygen demand, and that these facilities only represent those with an average flow of less than 1MGD.
+
+#### The data for this map comes from NPDES permits available through the Oregon DEQ.
