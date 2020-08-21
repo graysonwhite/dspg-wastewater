@@ -1,0 +1,7 @@
+---
+output: html_document
+---
+
+#### This map shows land in oregon that is owned and managed by different agencies, as well as areas that are registered as census designated places, to give an idea of the land use patterns in the state. Agricultural land is not included on the map, and represents a significant amount of the remaining land. NPDES permitted facilities in our dataset are also shown, and you can see how these correspond to census designated places.
+
+#### Map layer data comes from Oregon DEQ NPDES permits in addition to sources listed on the map.
