@@ -3,21 +3,20 @@ title: 'Water Quality'
 output: html_document
 ---
 
-## What is water quality and why is it important?
+### **What is water quality and why is it important?**
 
-#### Water quality often refers to specific characteristics that make the water suitable for drinking, recreation, and use by other species such as fish or wildlife. These characteristics can include pH, temperature, turbidity, biological oxygen demand (BOD), nutrient (phosphorus and nitrogen) concentration, and the concentration of other chemicals. The common components of concern in human wastewater are total suspended solids, biochemical oxygen demand, and fecal coliform. Most fecal coliform is not harmful, but it can include harmful species like ***E. coli***. All of these factors can impact the ability of water to serve populations as a drinking water source, for human recreation, or to support a diverse ecosystem. It is important that we treat our wastewater, because other communities may also need to use the water downstream.
+> Water quality often refers to specific characteristics that make the water suitable for drinking, recreation, and use by other species such as fish or wildlife. These characteristics can include pH, temperature, turbidity, biological oxygen demand (BOD), nutrient (phosphorus and nitrogen) concentration, and the concentration of other chemicals. The common components of concern in human wastewater are total suspended solids, biochemical oxygen demand, and fecal coliform. Most fecal coliform is not harmful, but it can include harmful species like *E. coli*. All of these factors can impact the ability of water to serve populations as a drinking water source, for human recreation, or to support a diverse ecosystem. It is important that we treat our wastewater, because other communities may also need to use the water downstream.
 
-## Why do we treat our wastewater?
+### **Why do we treat our wastewater?**
 
-#### We treat wastewater to minimize impacts on water quality. Our domestic wastewater contains solids, nutrients, human pathogens, oxygen demanding compounds (generally carbon compounds), and other trace specific contaminants like pharmaceuticals, nanoparticles, etc. Wastewater treatment facilities includ processes that are designed to reduce some of these specific water quality impacts so they dot not affect our surface waters, groundwaters, or land application.
+> We treat wastewater to minimize impacts on water quality. Our domestic wastewater contains solids, nutrients, human pathogens, oxygen demanding compounds (generally carbon compounds), and other trace specific contaminants like pharmaceuticals, nanoparticles, etc. Wastewater treatment facilities includ processes that are designed to reduce some of these specific water quality impacts so they dot not affect our surface waters, groundwaters, or land application.
 
-## Permit Requirements
 
-###Clean Water Act
-> The Clean Water Act regulates all discharges to surface waters in the United States. Point (single) source dischargers to surface waters are required to obtain a National Pollutant Discharge Elimination System (NPDES) permit, which outlines individual water quality standards and testing requirements for the discharger. 
+### **Clean Water Act**
+> The Clean Water Act regulates all discharges to surface waters in the United States to ensure good water quality for human and ecosystem uses. Point (single) source dischargers to surface waters are required to obtain a National Pollutant Discharge Elimination System (NPDES) permit, which outlines individual water quality standards and testing requirements for the discharger. 
 
-* **Five-Day Biochemical Oxygen Demand (BOD5)**  
-	Biochemical oxygen demand is measured to determine how much dissolved oxygen is required to decompose organic waste. This is one of the main causes of eutrophication. The decomposition of oxygen demanding compounds can use up all the available oxygen that is dissolved in the water, leaving none available for the needs of aquatic organisms (eutrophication). One of the main goals of wastewater treatment is to decompose much of the organic matter in wastewater before it is discharged to surface waters, so that eutrophication does not occur. 
+### **NPDES Permit Requirements**
+
+* **Five-Day Biochemical Oxygen Demand (BOD5)** - Biochemical oxygen demand is measured to determine how much dissolved oxygen is required to decompose organic waste. This is one of the main causes of eutrophication. The decomposition of oxygen demanding compounds can use up all the available oxygen that is dissolved in the water, leaving none available for the needs of aquatic organisms (eutrophication). One of the main goals of wastewater treatment is to decompose much of the organic matter in wastewater before it is discharged to surface waters, so that eutrophication does not occur. 
 	
-* **Total Suspended Solids (TSS)**  
-  Total suspended solids is a measure of how much material is suspended in the wastewater. In addition to organic matter, this can also include inorganic particles such as minerals. One of the goals of wastewater treatment is to remove suspended solids through settling or digestion by microorganisms. This not only makes the water look clearer, but improves water quality for aquatic organisms as well.
+* **Total Suspended Solids (TSS)** - Total suspended solids is a measure of how much material is suspended in the wastewater. In addition to organic matter, this can also include inorganic particles such as minerals. One of the goals of wastewater treatment is to remove suspended solids through settling or digestion by microorganisms. This not only makes the water look clearer, but improves water quality for aquatic organisms as well.

@@ -12,7 +12,7 @@ output: html_document
 
 ## **Centralized Wastewater Treatment**  
 
-> With centralized wastewater treatment, wastewater is piped through a collection system to a centralized facility, which treats the water through a variety of different processes prior to dischare. Centralized facilities are maintained by a city, sewer district, or other organization, which collects a bill from users attached to the wastewater system.
+> With centralized wastewater treatment, wastewater is piped through a collection system to a centralized facility, which treats the water through a variety of different processes prior to discharge. Centralized facilities are maintained and upgraded by a city, sewer district, or other organization, which collects a bill from users attached to the wastewater system.
 
 * **Treatment Process** 
 
@@ -21,7 +21,7 @@ output: html_document
   + **Primary Treatment** - The goal of primary treatment is to slow down the wastewater and allow solids to settle out. This takes place in primary clarifiers and septic tanks. Digestion of organic matter by microorganisms is also part of this process.  
 
   + **Secondary Treatment** - Secondary treatment is used when wastewater is not sufficiently treated to be safely discharged. Examples of secondary treatment include septic tank drain fields, sequencing batch reactors, lagoons, trickling filters, and rotating biological contactors.  
-  + **Disinfection** - Disinfection is used to kill potentially harmful pathogens in the water. Common methods of disinfection include chorination and ultraviolet light.  
+  + **Disinfection** - Disinfection is used to kill potentially harmful pathogens in the water. Common methods of disinfection include chlorination and ultraviolet light.  
 
   + **Tertiary Treatment** - Tertiary treatment is used when treatment is needed beyond removal of biochemical oxygen demand, total suspended solids, and fecal coliform. This might be to remove excess nutrients such as Phosphorus and Nitrogen, to remove metals such as mercury or silver, or address other water quality issues, especially if the system serves business or industrial users.
 
@@ -29,7 +29,7 @@ output: html_document
 
   + **Irrigation** - Wastewater is commonly used for irrigation. It must be treated before irrigation to remove harmful bacteria and other water quality issues, especially if it is to be used as irrigation for agricultural areas. 
 
-  + **Biosolids Application** - Biosolids must be removed from the clarifiers periodically to allow for continued treatment of wastewater. Some facilities have approved plans to land apply these biosolids as fertilizer. For facilites that discharge to surface waters, this is included in the NPDES permit. For those that do not discharge to surface waters, state administered WPCF permits can be obtained through the Oregon DEQ.
+  + **Biosolids Application** - Biosolids must be removed from the clarifiers periodically to allow for continued treatment of wastewater. Some facilities have approved plans to land apply these biosolids as fertilizer. For facilities that discharge to surface waters, this is included in the NPDES permit. For those that do not discharge to surface waters, state administered WPCF permits can be obtained through the Oregon DEQ.
   
 * **Well Injection**
   + Sometimes, wastewater is injected into a porous geologic formation through a well instead of discharged to surface waters or land applied. If an appropriate geologic formation is available that will not interfere with groundwater, wastewater is treated and injected into wells drilled specifically for disposal of wastewater. 
